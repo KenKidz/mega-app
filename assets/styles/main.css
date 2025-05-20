@@ -1,0 +1,338 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+@import "./theme.css";
+
+@theme static {
+  /* Map Catppuccin colors to Tailwind CSS v4 variables */
+  --color-blue-50: var(--lavender);
+  --color-blue-300: var(--blue);
+  --color-blue-400: var(--blue);
+  --color-blue-500: var(--blue);
+  --color-blue-600: var(--sapphire);
+  --color-blue-700: var(--sapphire);
+  --color-blue-800: var(--teal);
+  --color-blue-900: var(--teal);
+
+  --color-red-50: var(--flamingo);
+  --color-red-100: var(--flamingo);
+  --color-red-200: var(--flamingo);
+  --color-red-300: var(--maroon);
+  --color-red-400: var(--maroon);
+  --color-red-500: var(--red);
+  --color-red-600: var(--red);
+  --color-red-700: var(--red);
+  --color-red-800: var(--red);
+  --color-red-900: var(--red);
+
+  --color-green-50: var(--green);
+  --color-green-100: var(--green);
+  --color-green-200: var(--green);
+  --color-green-300: var(--green);
+  --color-green-400: var(--green);
+  --color-green-500: var(--green);
+  --color-green-600: var(--green);
+  --color-green-700: var(--green);
+  --color-green-800: var(--green);
+  --color-green-900: var(--green);
+
+  --color-yellow-50: var(--yellow);
+  --color-yellow-100: var(--yellow);
+  --color-yellow-200: var(--yellow);
+  --color-yellow-300: var(--yellow);
+  --color-yellow-400: var(--yellow);
+  --color-yellow-500: var(--yellow);
+  --color-yellow-600: var(--yellow);
+  --color-yellow-700: var(--yellow);
+  --color-yellow-800: var(--yellow);
+  --color-yellow-900: var(--yellow);
+
+  --color-pink-50: var(--pink);
+  --color-pink-100: var(--pink);
+  --color-pink-200: var(--pink);
+  --color-pink-300: var(--pink);
+  --color-pink-400: var(--pink);
+  --color-pink-500: var(--pink);
+  --color-pink-600: var(--pink);
+  --color-pink-700: var(--pink);
+  --color-pink-800: var(--pink);
+  --color-pink-900: var(--pink);
+
+  --color-purple-50: var(--mauve);
+  --color-purple-100: var(--mauve);
+  --color-purple-200: var(--mauve);
+  --color-purple-300: var(--mauve);
+  --color-purple-400: var(--mauve);
+  --color-purple-500: var(--mauve);
+  --color-purple-600: var(--mauve);
+  --color-purple-700: var(--mauve);
+  --color-purple-800: var(--mauve);
+  --color-purple-900: var(--mauve);
+
+  --color-orange-50: var(--peach);
+  --color-orange-100: var(--peach);
+  --color-orange-200: var(--peach);
+  --color-orange-300: var(--peach);
+  --color-orange-400: var(--peach);
+  --color-orange-500: var(--peach);
+  --color-orange-600: var(--peach);
+  --color-orange-700: var(--peach);
+  --color-orange-800: var(--peach);
+  --color-orange-900: var(--peach);
+
+  --color-neutral-50: var(--base);
+  --color-neutral-100: var(--crust);
+  --color-neutral-200: var(--surface-0);
+  --color-neutral-300: var(--surface-1);
+  --color-neutral-400: var(--surface-2);
+  --color-neutral-500: var(--overlay-0);
+  --color-neutral-600: var(--overlay-1);
+  --color-neutral-700: var(--overlay-2);
+  --color-neutral-800: var(--subtext-0);
+  --color-neutral-900: var(--subtext-1);
+  --color-neutral-950: var(--text);
+}
+
+/* Nuxt UI custom properties */
+:root {
+  /* UI Primary and Secondary Colors */
+  --ui-color-primary-50: var(--color-blue-50);
+  --ui-color-primary-100: var(--color-blue-100);
+  --ui-color-primary-200: var(--color-blue-200);
+  --ui-color-primary-300: var(--color-blue-300);
+  --ui-color-primary-400: var(--color-blue-400);
+  --ui-color-primary-500: var(--color-blue-500);
+  --ui-color-primary-600: var(--color-blue-600);
+  --ui-color-primary-700: var(--color-blue-700);
+  --ui-color-primary-800: var(--color-blue-800);
+  --ui-color-primary-900: var(--color-blue-900);
+
+  --ui-color-secondary-50: var(--color-red-50);
+  --ui-color-secondary-100: var(--color-red-100);
+  --ui-color-secondary-200: var(--color-red-200);
+  --ui-color-secondary-300: var(--color-red-300);
+  --ui-color-secondary-400: var(--color-red-400);
+  --ui-color-secondary-500: var(--color-red-500);
+  --ui-color-secondary-600: var(--color-red-600);
+  --ui-color-secondary-700: var(--color-red-700);
+  --ui-color-secondary-800: var(--color-red-800);
+  --ui-color-secondary-900: var(--color-red-900);
+
+  /* Success, Info, Warning, Error Colors */
+  --ui-color-success-50: var(--color-green-50);
+  --ui-color-success-100: var(--color-green-100);
+  --ui-color-success-200: var(--color-green-200);
+  --ui-color-success-300: var(--color-green-300);
+  --ui-color-success-400: var(--color-green-400);
+  --ui-color-success-500: var(--color-green-500);
+  --ui-color-success-600: var(--color-green-600);
+  --ui-color-success-700: var(--color-green-700);
+  --ui-color-success-800: var(--color-green-800);
+  --ui-color-success-900: var(--color-green-900);
+
+  --ui-color-warning-50: var(--color-yellow-50);
+  --ui-color-warning-100: var(--color-yellow-100);
+  --ui-color-warning-200: var(--color-yellow-200);
+  --ui-color-warning-300: var(--color-yellow-300);
+  --ui-color-warning-400: var(--color-yellow-400);
+  --ui-color-warning-500: var(--color-yellow-500);
+  --ui-color-warning-600: var(--color-yellow-600);
+  --ui-color-warning-700: var(--color-yellow-700);
+  --ui-color-warning-800: var(--color-yellow-800);
+  --ui-color-warning-900: var(--color-yellow-900);
+
+  --ui-color-error-50: var(--color-red-50);
+  --ui-color-error-100: var(--color-red-100);
+  --ui-color-error-200: var(--color-red-200);
+  --ui-color-error-300: var(--color-red-300);
+  --ui-color-error-400: var(--color-red-400);
+  --ui-color-error-500: var(--color-red-500);
+  --ui-color-error-600: var(--color-red-600);
+  --ui-color-error-700: var(--color-red-700);
+  --ui-color-error-800: var(--color-red-800);
+  --ui-color-error-900: var(--color-red-900);
+
+  --ui-color-info-50: var(--color-blue-50);
+  --ui-color-info-100: var(--color-blue-100);
+  --ui-color-info-200: var(--color-blue-200);
+  --ui-color-info-300: var(--color-blue-300);
+  --ui-color-info-400: var(--color-blue-400);
+  --ui-color-info-500: var(--color-blue-500);
+  --ui-color-info-600: var(--color-blue-600);
+  --ui-color-info-700: var(--color-blue-700);
+  --ui-color-info-800: var(--color-blue-800);
+  --ui-color-info-900: var(--color-blue-900);
+
+  --ui-color-neutral-50: var(--color-neutral-50);
+  --ui-color-neutral-100: var(--color-neutral-100);
+  --ui-color-neutral-200: var(--color-neutral-200);
+  --ui-color-neutral-300: var(--color-neutral-300);
+  --ui-color-neutral-400: var(--color-neutral-400);
+  --ui-color-neutral-500: var(--color-neutral-500);
+  --ui-color-neutral-600: var(--color-neutral-600);
+  --ui-color-neutral-700: var(--color-neutral-700);
+  --ui-color-neutral-800: var(--color-neutral-800);
+  --ui-color-neutral-900: var(--color-neutral-900);
+  --ui-color-neutral-950: var(--color-neutral-900);
+
+  /* UI Component Variables */
+  --ui-primary: var(--ui-color-primary-500);
+  --ui-secondary: var(--ui-color-secondary-500);
+  --ui-success: var(--ui-color-success-500);
+  --ui-info: var(--ui-color-info-500);
+  --ui-warning: var(--ui-color-warning-500);
+  --ui-error: var(--ui-color-error-500);
+
+  /* Neutral UI Text */
+  --ui-text-dimmed: var(--ui-color-neutral-400);
+  --ui-text-muted: var(--ui-color-neutral-500);
+  --ui-text-toned: var(--ui-color-neutral-600);
+  --ui-text: var(--text);
+  --ui-text-highlighted: var(--ui-color-neutral-900);
+  --ui-text-inverted: #fff;
+
+  /* UI Backgrounds */
+  --ui-bg: var(--base);
+  --ui-bg-muted: var(--ui-color-neutral-50);
+  --ui-bg-elevated: var(--ui-color-neutral-100);
+  --ui-bg-accented: var(--ui-color-neutral-200);
+  --ui-bg-inverted: var(--ui-color-neutral-900);
+
+  /* UI Borders */
+  --ui-border: var(--ui-color-neutral-200);
+  --ui-border-muted: var(--ui-color-neutral-200);
+  --ui-border-accented: var(--ui-color-neutral-300);
+  --ui-border-inverted: var(--ui-color-neutral-900);
+}
+
+/* Dark Theme Adjustments - Catppuccin Mocha */
+.dark {
+  /* UI Component Variables - Using Catppuccin Mocha palette */
+  --ui-primary: var(--ui-color-primary-400);
+  --ui-secondary: var(--ui-color-secondary-400);
+  --ui-success: var(--ui-color-success-400);
+  --ui-info: var(--ui-color-info-400);
+  --ui-warning: var(--ui-color-warning-400);
+  --ui-error: var(--ui-color-error-400);
+
+  /* Neutral UI Text - Using Catppuccin text/subtext variables */
+  --ui-text-dimmed: var(--ui-color-neutral-700);
+  --ui-text-muted: var(--ui-color-neutral-800);
+  --ui-text-toned: var(--ui-color-neutral-900);
+  --ui-text: var(--text);
+  --ui-text-highlighted: var(--ui-color-neutral-950);
+  --ui-text-inverted: var(--ui-color-neutral-100);
+
+  /* UI Backgrounds - Using Catppuccin base/surface variables */
+  --ui-bg: var(--base);
+  --ui-bg-muted: var(--ui-color-neutral-100);
+  --ui-bg-elevated: var(--ui-color-neutral-200);
+  --ui-bg-accented: var(--ui-color-neutral-300);
+  --ui-bg-inverted: var(--ui-color-neutral-950);
+
+  /* UI Borders - Using Catppuccin surface/overlay variables */
+  --ui-border: var(--ui-color-neutral-400);
+  --ui-border-muted: var(--ui-color-neutral-500);
+  --ui-border-accented: var(--ui-color-neutral-600);
+  --ui-border-inverted: var(--ui-color-neutral-950);
+}
+
+/* General App Styling */
+html,
+body {
+  @apply antialiased font-sans;
+}
+
+/* Accent Color Utilities */
+.accent-lavender {
+  accent-color: var(--lavender);
+}
+.accent-blue {
+  accent-color: var(--blue);
+}
+.accent-sapphire {
+  accent-color: var(--sapphire);
+}
+.accent-teal {
+  accent-color: var(--teal);
+}
+.accent-green {
+  accent-color: var(--green);
+}
+.accent-yellow {
+  accent-color: var(--yellow);
+}
+.accent-peach {
+  accent-color: var(--peach);
+}
+.accent-red {
+  accent-color: var(--red);
+}
+.accent-maroon {
+  accent-color: var(--maroon);
+}
+.accent-mauve {
+  accent-color: var(--mauve);
+}
+.accent-pink {
+  accent-color: var(--pink);
+}
+.accent-flamingo {
+  accent-color: var(--flamingo);
+}
+.accent-rosewater {
+  accent-color: var(--rosewater);
+}
+
+/* Transition Effects */
+.page-enter-active,
+.page-leave-active {
+  transition: all 300ms;
+}
+
+.page-enter-from,
+.page-leave-to {
+  filter: blur(1rem);
+  opacity: 0;
+}
+
+.page-leave-from,
+.page-enter-to {
+  filter: blur(0rem);
+  opacity: 1;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--mantle);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--overlay-0);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--overlay-1);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: var(--crust);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--overlay-1);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--overlay-2);
+}

@@ -1,0 +1,198 @@
+/* Catppuccin Palette - Light Theme Variables */
+:root {
+  --rosewater: #dc8a78;
+  --flamingo: #dd7878;
+  --pink: #ea76cb;
+  --mauve: #8839ef;
+  --red: #d20f39;
+  --maroon: #e64553;
+  --peach: #fe640b;
+  --yellow: #df8e1d;
+  --green: #40a02b;
+  --teal: #179299;
+  --sky: #04a5e5;
+  --sapphire: #209fb5;
+  --blue: #1e66f5;
+  --lavender: #7287fd;
+  --text: #4c4f69;
+  --subtext-1: #5c5f77;
+  --subtext-0: #6c6f85;
+  --overlay-2: #7c7f93;
+  --overlay-1: #8c8fa1;
+  --overlay-0: #9ca0b0;
+  --surface-2: #acb0be;
+  --surface-1: #bcc0cc;
+  --surface-0: #ccd0da;
+  --base: #eff1f5;
+  --mantle: #e6e9ef;
+  --crust: #dce0e8;
+
+  /* Application-specific color assignments based on Catppuccin guidelines */
+  
+  /* Background elements */
+  --background-pane: var(--base);
+  --secondary-pane-crust: var(--crust);
+  --secondary-pane-mantle: var(--mantle);
+  
+  /* Surface elements - for cards, modals, etc */
+  --surface-element-0: var(--surface-0);
+  --surface-element-1: var(--surface-1);
+  --surface-element-2: var(--surface-2);
+  
+  /* Overlay elements - for dropdowns, tooltips, etc */
+  --overlay-element-0: var(--overlay-0);
+  --overlay-element-1: var(--overlay-1);
+  --overlay-element-2: var(--overlay-2);
+  
+  /* Typography */
+  --body-text: var(--text);
+  --heading-text: var(--text);
+  --subheading-text-0: var(--subtext-0);
+  --subheading-text-1: var(--subtext-1);
+  --subtle-text: var(--overlay-1);
+  --link-text: var(--blue);
+  
+  /* Status colors */
+  --success-text: var(--green);
+  --warning-text: var(--yellow);
+  --error-text: var(--red);
+  
+  /* UI elements */
+  --tag-color: var(--blue);
+  --selection-background: var(--overlay-2);
+  --selection-opacity: 0.2;
+  --cursor: var(--rosewater);
+}
+
+/* Dark Theme Variables */
+.dark {
+  --rosewater: #f5e0dc;
+  --flamingo: #f2cdcd;
+  --pink: #f5c2e7;
+  --mauve: #cba6f7;
+  --red: #f38ba8;
+  --maroon: #eba0ac;
+  --peach: #fab387;
+  --yellow: #f9e2af;
+  --green: #a6e3a1;
+  --teal: #94e2d5;
+  --sky: #89dceb;
+  --sapphire: #74c7ec;
+  --blue: #89b4fa;
+  --lavender: #b4befe;
+  --text: #cdd6f4;
+  --subtext-1: #bac2de;
+  --subtext-0: #a6adc8;
+  --overlay-2: #9399b2;
+  --overlay-1: #7f849c;
+  --overlay-0: #6c7086;
+  --surface-2: #585b70;
+  --surface-1: #45475a;
+  --surface-0: #313244;
+  --base: #1e1e2e;
+  --mantle: #181825;
+  --crust: #11111b;
+
+  /* Application-specific color assignments based on Catppuccin guidelines */
+  
+  /* Background elements */
+  --background-pane: var(--base);
+  --secondary-pane-crust: var(--crust);
+  --secondary-pane-mantle: var(--mantle);
+  
+  /* Surface elements - for cards, modals, etc */
+  --surface-element-0: var(--surface-0);
+  --surface-element-1: var(--surface-1);
+  --surface-element-2: var(--surface-2);
+  
+  /* Overlay elements - for dropdowns, tooltips, etc */
+  --overlay-element-0: var(--overlay-0);
+  --overlay-element-1: var(--overlay-1);
+  --overlay-element-2: var(--overlay-2);
+  
+  /* Typography */
+  --body-text: var(--text);
+  --heading-text: var(--text);
+  --subheading-text-0: var(--subtext-0);
+  --subheading-text-1: var(--subtext-1);
+  --subtle-text: var(--overlay-1);
+  --link-text: var(--blue);
+  
+  /* Status colors */
+  --success-text: var(--green);
+  --warning-text: var(--yellow);
+  --error-text: var(--red);
+  
+  /* UI elements */
+  --tag-color: var(--blue);
+  --selection-background: var(--overlay-2);
+  --selection-opacity: 0.3;
+  --cursor: var(--rosewater);
+}
+
+/* Utility classes for direct color usage */
+.text-rosewater { color: var(--rosewater); }
+.text-flamingo { color: var(--flamingo); }
+.text-pink { color: var(--pink); }
+.text-mauve { color: var(--mauve); }
+.text-red { color: var(--red); }
+.text-maroon { color: var(--maroon); }
+.text-peach { color: var(--peach); }
+.text-yellow { color: var(--yellow); }
+.text-green { color: var(--green); }
+.text-teal { color: var(--teal); }
+.text-sky { color: var(--sky); }
+.text-sapphire { color: var(--sapphire); }
+.text-blue { color: var(--blue); }
+.text-lavender { color: var(--lavender); }
+
+.bg-rosewater { background-color: var(--rosewater); }
+.bg-flamingo { background-color: var(--flamingo); }
+.bg-pink { background-color: var(--pink); }
+.bg-mauve { background-color: var(--mauve); }
+.bg-red { background-color: var(--red); }
+.bg-maroon { background-color: var(--maroon); }
+.bg-peach { background-color: var(--peach); }
+.bg-yellow { background-color: var(--yellow); }
+.bg-green { background-color: var(--green); }
+.bg-teal { background-color: var(--teal); }
+.bg-sky { background-color: var(--sky); }
+.bg-sapphire { background-color: var(--sapphire); }
+.bg-blue { background-color: var(--blue); }
+.bg-lavender { background-color: var(--lavender); }
+
+/* Layout utility classes based on Catppuccin guidelines */
+.bg-base { background-color: var(--background-pane); }
+.bg-crust { background-color: var(--secondary-pane-crust); }
+.bg-mantle { background-color: var(--secondary-pane-mantle); }
+
+.bg-surface-0 { background-color: var(--surface-element-0); }
+.bg-surface-1 { background-color: var(--surface-element-1); }
+.bg-surface-2 { background-color: var(--surface-element-2); }
+
+.bg-overlay-0 { background-color: var(--overlay-element-0); }
+.bg-overlay-1 { background-color: var(--overlay-element-1); }
+.bg-overlay-2 { background-color: var(--overlay-element-2); }
+
+/* Typography utility classes */
+.text-body { color: var(--body-text); }
+.text-heading { color: var(--heading-text); }
+.text-subheading-0 { color: var(--subheading-text-0); }
+.text-subheading-1 { color: var(--subheading-text-1); }
+.text-subtle { color: var(--subtle-text); }
+.text-link { color: var(--link-text); }
+
+/* Status utility classes */
+.text-success { color: var(--success-text); }
+.text-warning { color: var(--warning-text); }
+.text-error { color: var(--error-text); }
+
+/* Selection utility */
+.selection-bg { 
+  background-color: var(--selection-background); 
+  opacity: var(--selection-opacity);
+}
+
+/* Additional UI element classes */
+.cursor-color { background-color: var(--cursor); }
+.tag-bg { background-color: var(--tag-color); }
