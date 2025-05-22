@@ -22,14 +22,24 @@
 </template>
 
 <script setup lang="ts">
-import { useSidebarStore } from '~/stores/useSidebar';
+import { useSidebarStore } from "~/stores/useSidebar";
 
 const sidebarStore = useSidebarStore();
+const { isAuthenticated } = useAuth();
+const authRoutes = ["/auth/login", "/auth/register", "/auth/forgot-password"];
+const route = useRoute();
+const router = useRouter();
 
 // Use computed properties for reactivity
 const isExpanded = computed(() => sidebarStore.isExpanded);
 const isMobileView = computed(() => sidebarStore.isMobileView);
 const isMobileOpen = computed(() => sidebarStore.isMobileOpen);
+
+onBeforeMount(() => {
+  if (!isAuthenticated.value && !authRoutes.includes(route.path)) {
+    router.push("/auth/login");
+  }
+});
 </script>
 
 <style scoped>

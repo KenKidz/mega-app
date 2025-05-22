@@ -11,13 +11,45 @@
         Register to access all features and services.
       </p>
     </div>
-    <div class="space-y-3 sm:space-y-4">
+    
+    <div v-if="registrationStep === 'confirmation'" class="space-y-4">
+      <p class="text-center mb-4">
+        We've sent a verification code to your email address. Please enter it below to confirm your account.
+      </p>
+      
+      <UFormField label="Verification Code" required name="confirmationCode">
+        <UInput
+          v-model="confirmationCode"
+          class="w-full"
+          color="primary"
+          placeholder="Enter verification code"
+        />
+      </UFormField>        <UButton 
+        block 
+        @click="confirmSignUp"
+        :loading="isLoading"
+        :disabled="isLoading || !confirmationCode"
+      >
+        Verify Account
+      </UButton>
+      
+      <div class="text-center mt-4">
+        <p class="text-sm text-subtle">
+          <span class="cursor-pointer text-blue-600 hover:text-blue-800 font-medium" @click="registrationStep = 'registration'">
+            Go back
+          </span>
+        </p>
+      </div>
+    </div>
+    
+    <div v-else class="space-y-3 sm:space-y-4">
       <!-- Social Register Buttons -->
       <UButton
         block
         color="neutral"
         class="shadow-sm text-xs sm:text-sm"
         variant="subtle"
+        disabled
       >
         <template #leading>
           <UIcon name="i-logos-google-icon" />
@@ -30,6 +62,7 @@
         color="neutral"
         class="shadow-sm text-xs sm:text-sm"
         variant="subtle"
+        disabled
       >
         <template #leading>
           <UIcon name="i-logos-github-icon" />
@@ -51,10 +84,10 @@
       >
         <UFormField label="Full Name" required name="fullname">
           <UInput
-            v-model="state.fullname"
+            v-model="state.username"
             class="w-full"
             color="primary"
-            placeholder="Enter your full name"
+            placeholder="Choose a username"
           />
         </UFormField>
 
@@ -128,9 +161,14 @@
             v-model="state.agreeTerms"
             label="I agree to the Terms of Service and Privacy Policy"
           />
-        </UFormField>
-
-        <UButton type="submit" block class="mt-4">Create Account</UButton>
+        </UFormField>        <UButton 
+          type="submit" 
+          block 
+          class="mt-4"          :loading="isLoading"
+          :disabled="isLoading"
+        >
+          Create Account
+        </UButton>
 
         <div class="text-center mt-4">
           <p class="text-sm text-subtle">
@@ -150,11 +188,12 @@
 
 <script setup lang="ts">
 definePageMeta({
-  layout: "auth",
+  layout: "auth"
 });
 
 import { z } from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
+import { useAuth } from '~/composables/useAuth';
 
 type Schema = z.output<typeof schema>;
 
@@ -162,9 +201,12 @@ const showPass = ref<boolean>(false);
 const showConfirmPass = ref<boolean>(false);
 const passwordFocused = ref<boolean>(false);
 const passwordValidatorRef = ref<any>(null);
+const registrationStep = ref<'registration' | 'confirmation'>('registration');
+const confirmationCode = ref<string>('');
+const registeredUsername = ref<string>('');
 
 const state = reactive<Partial<Schema>>({
-  fullname: "",
+  username: "",
   email: "",
   password: "",
   confirmPassword: "",
@@ -173,7 +215,7 @@ const state = reactive<Partial<Schema>>({
 
 const schema = z
   .object({
-    fullname: z.string().min(1, "Required"),
+    username: z.string().min(1, "Required"),
     email: z.string().min(1, "Required").email("Invalid email format"),
     password: z.string().min(1, "Required"),
     confirmPassword: z.string().min(1, "Required"),
@@ -193,31 +235,90 @@ const schema = z
     {
       message: "Password doesn't meet all requirements",
       path: ["password"],
-    }
-  );
+    }  );
 
-// Hook into form submission event
+// Use our auth composable
+const { register, confirmRegistration, isLoading } = useAuth();
 const toast = useToast();
-async function onSubmit(event: FormSubmitEvent<any>) {
-  try {
-    const validData = schema.parse(state);
+const router = useRouter();
 
-    toast.add({
-      title: "Success",
-      description: "Your account has been created successfully!",
-      color: "success",
-    });
-    console.log(validData);
-  } catch (error) {
+// Handle form submission for registration
+async function onSubmit(event: FormSubmitEvent<any>) {  try {
+    const validData = schema.parse(state);
+    
+    const result = await register(
+      validData.username,
+      validData.password,
+      validData.email
+    );
+    
+    if (result.success) {
+      registeredUsername.value = validData.username;
+      
+      if (result.nextStep && result.nextStep.signUpStep === 'CONFIRM_SIGN_UP') {
+        toast.add({
+          title: "Verification Required",
+          description: "Please check your email for a verification code.",
+          color: "info",
+        });
+        
+        registrationStep.value = 'confirmation';
+      } else {
+        toast.add({
+          title: "Success",
+          description: "Your account has been created successfully!",
+          color: "success",
+        });
+        
+        // If auto sign-in worked, redirect to home
+        router.push('/');
+      }
+    } else if (result.error) {
+      toast.add({
+        title: "Error",
+        description: result.error,
+        color: "error",
+      });
+    }  } catch (error) {
     if (error instanceof z.ZodError) {
-      const formattedErrors = error.format();
-      console.error("Validation failed:", formattedErrors);
       toast.add({
         title: "Error",
         description: "Please fix the form errors",
         color: "error",
       });
     }
+  }
+}
+
+// Handle confirmation code submission
+async function confirmSignUp() {
+  if (!confirmationCode.value) {
+    toast.add({
+      title: "Error",
+      description: "Please enter the verification code",
+      color: "error",
+    });
+    return;
+  }    const result = await confirmRegistration(
+    registeredUsername.value || state.username!, 
+    confirmationCode.value
+  );
+  
+  if (result.success) {
+    toast.add({
+      title: "Success",
+      description: "Your account has been verified successfully!",
+      color: "success",
+    });
+    
+    // Redirect to home page
+    router.push('/');
+  } else if (result.error) {
+    toast.add({
+      title: "Error",
+      description: result.error,
+      color: "error",
+    });
   }
 }
 </script>

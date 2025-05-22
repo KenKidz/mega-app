@@ -6,91 +6,59 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem } from "@nuxt/ui";
+import { useAuth } from "~/composables/useAuth";
 
-const avatar = ref("");
-const username = ref("Ken kid");
+const { user, logout } = useAuth();
 const router = useRouter();
+const toast = useToast();
+
+// Get user details from auth composable
+const username = computed(() => {
+  return user.value?.username || "User";
+});
+
+// Avatar URL (we could use user's photo if available)
+const avatar = ref("");
+
+// Handle logout action
+const handleLogout = async () => {
+  const result = await logout();
+
+  if (result.success) {
+    toast.add({
+      title: "Success",
+      description: "You have been logged out successfully",
+      color: "success",
+    });
+    router.push("/auth/login");
+  } else {
+    toast.add({
+      title: "Error",
+      description: result.error || "Logout failed",
+      color: "error",
+    });
+  }
+};
+
 const items = ref<DropdownMenuItem[][]>([
   [
     {
-      label: 'Profile',
-      icon: 'i-lucide-user',
-      to: '/profile',
+      label: "Profile",
+      icon: "i-lucide-user",
+      to: "/profile",
     },
     {
-      label: 'Billing',
-      icon: 'i-lucide-credit-card'
+      label: "Settings",
+      icon: "i-lucide-cog",
     },
-    {
-      label: 'Settings',
-      icon: 'i-lucide-cog',
-      kbds: [',']
-    },
-    {
-      label: 'Keyboard shortcuts',
-      icon: 'i-lucide-monitor'
-    }
   ],
   [
     {
-      label: 'Team',
-      icon: 'i-lucide-users'
+      label: "Logout",
+      icon: "i-lucide-log-out",
+      kbds: ["shift", "meta", "q"],
+      onSelect: handleLogout,
     },
-    {
-      label: 'Invite users',
-      icon: 'i-lucide-user-plus',
-      children: [
-        [
-          {
-            label: 'Email',
-            icon: 'i-lucide-mail'
-          },
-          {
-            label: 'Message',
-            icon: 'i-lucide-message-square'
-          }
-        ],
-        [
-          {
-            label: 'More',
-            icon: 'i-lucide-circle-plus'
-          }
-        ]
-      ]
-    },
-    {
-      label: 'New team',
-      icon: 'i-lucide-plus',
-      kbds: ['meta', 'n']
-    }
   ],
-  [
-    {
-      label: 'GitHub',
-      icon: 'i-simple-icons-github',
-      to: 'https://github.com/nuxt/ui',
-      target: '_blank'
-    },
-    {
-      label: 'Support',
-      icon: 'i-lucide-life-buoy',
-      to: '/components/dropdown-menu'
-    },
-    {
-      label: 'API',
-      icon: 'i-lucide-cloud',
-      disabled: true
-    }
-  ],
-  [
-    {
-      label: 'Logout',
-      icon: 'i-lucide-log-out',
-      kbds: ['shift', 'meta', 'q'],
-      onSelect: () => {
-        router.push('/auth/login');
-      }
-    }
-  ]
-])
+]);
 </script>

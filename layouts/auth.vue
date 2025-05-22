@@ -32,6 +32,17 @@ useHead({
     },
   ],
 });
+
+const { isAuthenticated } = useAuth();
+const authRoutes = ["/auth/login", "/auth/register", "/auth/forgot-password"];
+const route = useRoute();
+const router = useRouter();
+
+onBeforeMount(() => {
+  if (isAuthenticated.value && authRoutes.includes(route.path)) {
+    router.push("/");
+  }
+});
 </script>
 
 <style scoped>

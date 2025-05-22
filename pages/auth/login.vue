@@ -16,6 +16,7 @@
         color="neutral"
         class="shadow-sm text-xs sm:text-sm"
         variant="subtle"
+        disabled
       >
         <template #leading>
           <UIcon name="i-logos-google-icon" />
@@ -28,6 +29,7 @@
         color="neutral"
         class="shadow-sm text-xs sm:text-sm"
         variant="subtle"
+        disabled
       >
         <template #leading>
           <UIcon name="i-logos-github-icon" />
@@ -47,14 +49,12 @@
         class="space-y-3 sm:space-y-4"
         @submit="onSubmit"
       >
-        <UFormField label="Email" required name="email">
+        <UFormField label="Username" required name="username">
           <UInput
-            v-model="state.email"
+            v-model="state.username"
             class="w-full"
             color="primary"
             placeholder="Enter your email"
-            type="email"
-            autocomplete="email"
           />
         </UFormField>
 
@@ -85,9 +85,14 @@
           v-model="state.rememberMe"
           label="Remember me"
           class="text-sm"
-        />
-
-        <UButton type="submit" block class="mt-4">Login</UButton>
+        />        <UButton 
+          type="submit" 
+          block 
+          class="mt-4"          :loading="isLoading"
+          :disabled="isLoading"
+        >
+          Login
+        </UButton>
 
         <div class="text-center mt-4">
           <p class="text-sm text-subtle">
@@ -107,33 +112,57 @@
 
 <script setup lang="ts">
 definePageMeta({
-  layout: "auth",
+  layout: "auth"
 });
 
 import type { FormError, FormSubmitEvent } from "@nuxt/ui";
+import { useAuth } from '~/composables/useAuth';
 
 const showPass = ref<boolean>(false);
 const state = reactive({
-  email: undefined,
-  password: undefined,
+  username: '',
+  password: '',
   rememberMe: false,
-  showPassword: false,
 });
 
 const validate = (state: any): FormError[] => {
   const errors = [];
-  if (!state.email) errors.push({ name: "email", message: "Required" });
+  if (!state.username) errors.push({ name: "username", message: "Required" });
   if (!state.password) errors.push({ name: "password", message: "Required" });
   return errors;
 };
 
+const router = useRouter();
 const toast = useToast();
+const { login, isLoading } = useAuth();
+
 async function onSubmit(event: FormSubmitEvent<typeof state>) {
-  toast.add({
-    title: "Success",
-    description: "The form has been submitted.",
-    color: "success",
-  });
+  try {
+    const result = await login(state.username, state.password);
+    
+    if (result.success) {
+      toast.add({
+        title: "Success",
+        description: "You have been logged in successfully.",
+        color: "success",
+      });
+      
+      // Redirect to dashboard or home page
+      router.push('/');
+    } else if (result.error) {
+      toast.add({
+        title: "Error",
+        description: result.error,
+        color: "error",
+      });    }
+  } catch (err: any) {
+    console.log("Login error:", err);
+    toast.add({
+      title: "Error",
+      description: "An unexpected error occurred. Please try again.",
+      color: "error",
+    });
+  }
 }
 </script>
 

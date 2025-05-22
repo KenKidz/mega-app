@@ -2,6 +2,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
+  ssr: false,
   devtools: { enabled: true },
   css: ['~/assets/styles/main.css'],
   modules: [
@@ -24,6 +25,7 @@ export default defineNuxtConfig({
       awsS3Bucket: '',
       awsCognitoUserPoolId: '',
       awsCognitoClientId: '',
+      awsCognitoIdentityPoolId: '',
       awsCloudfrontDomain: '',
       awsAccessKeyId: '',
       awsSecretAccessKey: '',

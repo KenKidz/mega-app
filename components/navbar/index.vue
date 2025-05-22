@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="navbar-right ml-auto mr-5 flex items-center">
-      <div class="flex items-center space-x-2">
+      <div class="flex items-center space-x-4">
         <div v-if="isMobileView" class="flex items-center">
           <span class="text-sm text-gray-600 dark:text-gray-400 mr-2"
             >Mobile View</span
@@ -29,7 +29,27 @@
 
         <ThemeToggle />
 
-        <NavbarAvatarDropdown />
+        <!-- Authentication buttons (when not authenticated) -->
+        <div v-if="!isAuthenticated">
+          <UButton
+            variant="ghost"
+            size="sm"
+            @click="router.push('/auth/login')"
+          >
+            Login
+          </UButton>
+          <UButton
+            variant="solid"
+            color="primary"
+            size="sm"
+            @click="router.push('/auth/register')"
+          >
+            Sign Up
+          </UButton>
+        </div>
+
+        <!-- Avatar dropdown (when authenticated) -->
+        <NavbarAvatarDropdown v-else />
       </div>
     </div>
   </div>
@@ -39,6 +59,8 @@
 import { useSidebarStore } from "~/stores/useSidebar";
 
 const sidebarStore = useSidebarStore();
+const { isAuthenticated } = useAuth();
+const router = useRouter();
 
 // Initialize store event listeners
 onMounted(() => {
