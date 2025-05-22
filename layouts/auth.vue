@@ -1,12 +1,15 @@
 <template>
   <div class="auth-layout">
+    <div class="absolute top-0 right-2">
+      <ThemeToggle />
+    </div>
     <div class="background" aria-hidden="true">
       <div class="wave wave1"></div>
       <div class="wave wave2"></div>
       <div class="wave wave3"></div>
       <div class="wave wave4"></div>
     </div>
-    <UCard class="w-full max-w-[450px] p-4 md:p-6 mx-4 auth-card">
+    <UCard class="w-full max-w-[450px] p-4 md:p-6 mx-4 auth-card bg-base">
       <!-- Animated background elements -->
       <div class="card-bg-effect"></div>
       <div class="card-particle particle1"></div>
@@ -49,7 +52,7 @@ useHead({
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #13172b 0%, #1a213a 100%);
+  background: linear-gradient(135deg, var(--surface-0) 0%, var(--surface-2) 100%);
   z-index: -1;
 }
 
@@ -103,7 +106,6 @@ useHead({
 .auth-card {
   position: relative;
   overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.98);
   z-index: 1;
   border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);

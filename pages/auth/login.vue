@@ -2,10 +2,10 @@
   <div>
     <div class="text-center mb-6">
       <div class="user-icon mb-4">
-        <UIcon name="i-heroicons-user-circle" class="text-4xl sm:text-5xl" />
+        <UIcon name="i-lucide-circle-user" class="text-4xl sm:text-5xl" />
       </div>
       <h1 class="text-xl sm:text-2xl font-bold" id="login-heading">Login</h1>
-      <p class="text-gray-500 text-xs sm:text-sm">
+      <p class="text-subtle text-xs sm:text-sm">
         Enter your credentials to access your account.
       </p>
     </div>
@@ -14,8 +14,8 @@
       <UButton
         block
         color="neutral"
-        class="border shadow-sm text-xs sm:text-sm"
-        variant="soft"
+        class="shadow-sm text-xs sm:text-sm"
+        variant="subtle"
       >
         <template #leading>
           <UIcon name="i-logos-google-icon" />
@@ -26,8 +26,8 @@
       <UButton
         block
         color="neutral"
-        class="border shadow-sm text-xs sm:text-sm"
-        variant="soft"
+        class="shadow-sm text-xs sm:text-sm"
+        variant="subtle"
       >
         <template #leading>
           <UIcon name="i-logos-github-icon" />
@@ -38,7 +38,7 @@
       <!-- Divider -->
       <div class="flex items-center my-6">
         <div class="flex-grow border-t border-gray-300"></div>
-        <span class="px-3 text-gray-500 text-sm">or</span>
+        <span class="px-3 text-subtle text-sm">or</span>
         <div class="flex-grow border-t border-gray-300"></div>
       </div>
       <UForm
@@ -90,7 +90,7 @@
         <UButton type="submit" block class="mt-4">Login</UButton>
 
         <div class="text-center mt-4">
-          <p class="text-sm text-gray-600">
+          <p class="text-sm text-subtle">
             Don't have an account?
             <NuxtLink
               to="/auth/register"
@@ -134,7 +134,6 @@ async function onSubmit(event: FormSubmitEvent<typeof state>) {
     description: "The form has been submitted.",
     color: "success",
   });
-  console.log(event.data);
 }
 </script>
 

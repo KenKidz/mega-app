@@ -2,12 +2,12 @@
   <div>
     <div class="text-center mb-6">
       <div class="user-icon mb-4">
-        <UIcon name="i-heroicons-user-plus" class="text-4xl sm:text-5xl" />
+        <UIcon name="i-lucide-user-plus" class="text-4xl sm:text-5xl" />
       </div>
       <h1 class="text-xl sm:text-2xl font-bold" id="register-heading">
         Create Account
       </h1>
-      <p class="text-gray-500 text-xs sm:text-sm">
+      <p class="text-subtle text-xs sm:text-sm">
         Register to access all features and services.
       </p>
     </div>
@@ -16,36 +16,36 @@
       <UButton
         block
         color="neutral"
-        class="border shadow-sm text-xs sm:text-sm"
-        variant="soft"
+        class="shadow-sm text-xs sm:text-sm"
+        variant="subtle"
       >
         <template #leading>
           <UIcon name="i-logos-google-icon" />
         </template>
-        Sign up with Google
+        Google
       </UButton>
 
       <UButton
         block
         color="neutral"
-        class="border shadow-sm text-xs sm:text-sm"
-        variant="soft"
+        class="shadow-sm text-xs sm:text-sm"
+        variant="subtle"
       >
         <template #leading>
           <UIcon name="i-logos-github-icon" />
         </template>
-        Sign up with GitHub
+        GitHub
       </UButton>
 
       <!-- Divider -->
       <div class="flex items-center my-6">
         <div class="flex-grow border-t border-gray-300"></div>
-        <span class="px-3 text-gray-500 text-sm">or</span>
+        <span class="px-3 text-subtle text-sm">or</span>
         <div class="flex-grow border-t border-gray-300"></div>
       </div>
       <UForm
-        :validate="validate"
         :state="state"
+        :schema="schema"
         class="space-y-3 sm:space-y-4"
         @submit="onSubmit"
       >
@@ -68,7 +68,7 @@
             autocomplete="email"
           />
         </UFormField>
-        <UFormField label="Password" name="password">
+        <UFormField label="Password" required name="password">
           <UInput
             v-model="state.password"
             class="w-full"
@@ -76,6 +76,8 @@
             :type="showPass ? 'text' : 'password'"
             placeholder="Create a password"
             :trailing="true"
+            @focus="passwordFocused = true"
+            @blur="passwordFocused = false"
           >
             <template #trailing>
               <UButton
@@ -90,9 +92,13 @@
               />
             </template>
           </UInput>
+          <PasswordValidator
+            v-model="state.password"
+            :show-validation="passwordFocused"
+            ref="passwordValidatorRef"
+          />
         </UFormField>
-
-        <UFormField label="Confirm Password" name="confirmPassword">
+        <UFormField label="Confirm Password" required name="confirmPassword">
           <UInput
             v-model="state.confirmPassword"
             class="w-full"
@@ -117,15 +123,17 @@
             </template>
           </UInput>
         </UFormField>
-        <UCheckbox
-          v-model="state.agreeTerms"
-          label="I agree to the Terms of Service and Privacy Policy"
-        />
+        <UFormField name="agreeTerms">
+          <UCheckbox
+            v-model="state.agreeTerms"
+            label="I agree to the Terms of Service and Privacy Policy"
+          />
+        </UFormField>
 
         <UButton type="submit" block class="mt-4">Create Account</UButton>
 
         <div class="text-center mt-4">
-          <p class="text-sm text-gray-600">
+          <p class="text-sm text-subtle">
             Already have an account?
             <NuxtLink
               to="/auth/login"
@@ -145,51 +153,72 @@ definePageMeta({
   layout: "auth",
 });
 
-import type { FormError, FormSubmitEvent } from "@nuxt/ui";
+import { z } from "zod";
+import type { FormSubmitEvent } from "@nuxt/ui";
+
+type Schema = z.output<typeof schema>;
 
 const showPass = ref<boolean>(false);
 const showConfirmPass = ref<boolean>(false);
-const state = reactive({
-  fullname: undefined,
-  email: undefined,
-  password: undefined,
-  confirmPassword: undefined,
-  agreeTerms: false,
+const passwordFocused = ref<boolean>(false);
+const passwordValidatorRef = ref<any>(null);
+
+const state = reactive<Partial<Schema>>({
+  fullname: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  agreeTerms: undefined,
 });
 
-const validate = (state: any): FormError[] => {
-  const errors = [];
-  if (!state.fullname) errors.push({ name: "fullname", message: "Required" });
-  if (!state.email) errors.push({ name: "email", message: "Required" });
-  else if (!/^\S+@\S+\.\S+$/.test(state.email))
-    errors.push({ name: "email", message: "Invalid email format" });
+const schema = z
+  .object({
+    fullname: z.string().min(1, "Required"),
+    email: z.string().min(1, "Required").email("Invalid email format"),
+    password: z.string().min(1, "Required"),
+    confirmPassword: z.string().min(1, "Required"),
+    agreeTerms: z.literal(true, {
+      errorMap: () => ({ message: "You must agree to the terms" }),
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  })
+  .refine(
+    (data) => {
+      if (!passwordValidatorRef.value) return true;
+      return passwordValidatorRef.value.isValid;
+    },
+    {
+      message: "Password doesn't meet all requirements",
+      path: ["password"],
+    }
+  );
 
-  if (!state.password) errors.push({ name: "password", message: "Required" });
-  else if (state.password.length < 8)
-    errors.push({
-      name: "password",
-      message: "Password must be at least 8 characters",
-    });
-
-  if (!state.confirmPassword)
-    errors.push({ name: "confirmPassword", message: "Required" });
-  else if (state.password !== state.confirmPassword)
-    errors.push({ name: "confirmPassword", message: "Passwords do not match" });
-
-  if (!state.agreeTerms)
-    errors.push({ name: "agreeTerms", message: "You must agree to the terms" });
-
-  return errors;
-};
-
+// Hook into form submission event
 const toast = useToast();
-async function onSubmit(event: FormSubmitEvent<typeof state>) {
-  toast.add({
-    title: "Success",
-    description: "Your account has been created successfully!",
-    color: "success",
-  });
-  console.log(event.data);
+async function onSubmit(event: FormSubmitEvent<any>) {
+  try {
+    const validData = schema.parse(state);
+
+    toast.add({
+      title: "Success",
+      description: "Your account has been created successfully!",
+      color: "success",
+    });
+    console.log(validData);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const formattedErrors = error.format();
+      console.error("Validation failed:", formattedErrors);
+      toast.add({
+        title: "Error",
+        description: "Please fix the form errors",
+        color: "error",
+      });
+    }
+  }
 }
 </script>
 

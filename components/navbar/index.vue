@@ -18,7 +18,7 @@
         />
       </div>
     </div>
-    <div class="navbar-right ml-auto mr-4 flex items-center">
+    <div class="navbar-right ml-auto mr-5 flex items-center">
       <div class="flex items-center space-x-2">
         <div v-if="isMobileView" class="flex items-center">
           <span class="text-sm text-gray-600 dark:text-gray-400 mr-2"
@@ -27,15 +27,9 @@
           <span class="inline-block w-3 h-3 rounded-full bg-green-500"></span>
         </div>
 
-        <ClientOnly v-if="!colorMode?.forced">
-          <UButton
-            :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
-            color="neutral"
-            variant="ghost"
-            size="xl"
-            @click="isDark = !isDark"
-          />
-        </ClientOnly>
+        <ThemeToggle />
+
+        <NavbarAvatarDropdown />
       </div>
     </div>
   </div>
@@ -45,7 +39,6 @@
 import { useSidebarStore } from "~/stores/useSidebar";
 
 const sidebarStore = useSidebarStore();
-const colorMode = useColorMode();
 
 // Initialize store event listeners
 onMounted(() => {
@@ -59,14 +52,6 @@ onUnmounted(() => {
 // Use computed properties for reactivity
 const isExpanded = computed(() => sidebarStore.isExpanded);
 const isMobileView = computed(() => sidebarStore.isMobileView);
-const isDark = computed({
-  get() {
-    return colorMode.value === "dark";
-  },
-  set(_isDark) {
-    colorMode.preference = _isDark ? "dark" : "light";
-  },
-});
 
 const toggleSidebar = () => sidebarStore.toggleSidebar();
 </script>

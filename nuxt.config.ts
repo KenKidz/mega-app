@@ -17,5 +17,16 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
     layoutTransition: { name: 'page', mode: 'out-in' },
-  }
+  },
+  runtimeConfig: {
+    public: {
+      awsRegion: '',
+      awsS3Bucket: '',
+      awsCognitoUserPoolId: '',
+      awsCognitoClientId: '',
+      awsCloudfrontDomain: '',
+      awsAccessKeyId: '',
+      awsSecretAccessKey: '',
+    }
+  },
 })
