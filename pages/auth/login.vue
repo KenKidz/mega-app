@@ -1,12 +1,20 @@
 <template>
   <div>
-    <div class="text-center mb-6">
+    <div class="mb-6 text-center">
       <div class="user-icon mb-4">
-        <UIcon name="i-lucide-circle-user" class="text-4xl sm:text-5xl" />
+        <UIcon
+          name="i-lucide-circle-user"
+          class="text-4xl sm:text-5xl"
+        />
       </div>
-      <h1 class="text-xl sm:text-2xl font-bold" id="login-heading">Login</h1>
+      <h1
+        id="login-heading"
+        class="text-xl font-bold sm:text-2xl"
+      >
+        {{ t('loginTitle') }}
+      </h1>
       <p class="text-subtle text-xs sm:text-sm">
-        Enter your credentials to access your account.
+        {{ t('credentials') }}
       </p>
     </div>
     <div class="space-y-3 sm:space-y-4">
@@ -14,31 +22,32 @@
       <UButton
         block
         color="neutral"
-        class="shadow-sm text-xs sm:text-sm"
+        class="text-xs shadow-sm sm:text-sm"
         variant="subtle"
+        disabled
       >
         <template #leading>
           <UIcon name="i-logos-google-icon" />
         </template>
-        Google
+        {{ t('connectWithGoogle') }}
       </UButton>
-
       <UButton
         block
         color="neutral"
-        class="shadow-sm text-xs sm:text-sm"
+        class="text-xs shadow-sm sm:text-sm"
         variant="subtle"
+        disabled
       >
         <template #leading>
           <UIcon name="i-logos-github-icon" />
         </template>
-        GitHub
+        {{ t('connectWithGithub') }}
       </UButton>
 
       <!-- Divider -->
-      <div class="flex items-center my-6">
+      <div class="my-6 flex items-center">
         <div class="flex-grow border-t border-gray-300"></div>
-        <span class="px-3 text-subtle text-sm">or</span>
+        <span class="text-subtle px-3 text-sm">{{ t('or') }}</span>
         <div class="flex-grow border-t border-gray-300"></div>
       </div>
       <UForm
@@ -47,18 +56,23 @@
         class="space-y-3 sm:space-y-4"
         @submit="onSubmit"
       >
-        <UFormField label="Email" required name="email">
+        <UFormField
+          :label="t('usernameLabel')"
+          required
+          name="username"
+        >
           <UInput
-            v-model="state.email"
+            v-model="state.username"
             class="w-full"
             color="primary"
-            placeholder="Enter your email"
-            type="email"
-            autocomplete="email"
+            :placeholder="t('enterUsername')"
           />
         </UFormField>
 
-        <UFormField label="Password" name="password">
+        <UFormField
+          :label="t('passwordLabel')"
+          name="password"
+        >
           <UInput
             v-model="state.password"
             class="w-full"
@@ -73,7 +87,7 @@
                 variant="link"
                 size="md"
                 :icon="showPass ? 'i-lucide-eye-off' : 'i-lucide-eye'"
-                :aria-label="showPass ? 'Hide password' : 'Show password'"
+                :aria-label="showPass ? t('hidePassword') : t('showPassword')"
                 :aria-pressed="showPass"
                 aria-controls="password"
                 @click="showPass = !showPass"
@@ -83,20 +97,27 @@
         </UFormField>
         <UCheckbox
           v-model="state.rememberMe"
-          label="Remember me"
+          :label="t('rememberMe')"
           class="text-sm"
+          name="rememberMe"
         />
-
-        <UButton type="submit" block class="mt-4">Login</UButton>
-
-        <div class="text-center mt-4">
-          <p class="text-sm text-subtle">
-            Don't have an account?
+        <UButton
+          type="submit"
+          block
+          class="mt-4"
+          :loading="isLoading"
+          :disabled="isLoading"
+        >
+          {{ t('login') }}
+        </UButton>
+        <div class="mt-4 text-center">
+          <p class="text-subtle text-sm">
+            {{ t('dontHaveAccount') }}
             <NuxtLink
               to="/auth/register"
-              class="text-blue-600 hover:text-blue-800 font-medium"
+              class="font-medium text-blue-600 hover:text-blue-800"
             >
-              Register here
+              {{ t('registerHere') }}
             </NuxtLink>
           </p>
         </div>
@@ -106,34 +127,86 @@
 </template>
 
 <script setup lang="ts">
+import type { FormError, FormSubmitEvent } from '@nuxt/ui'
+import { useAuth } from '~/composables/useAuth'
+import { SignInStep } from '~/types/auth.type'
+import { getRememberedCredentials } from '~/utils/useRememberMe'
+
 definePageMeta({
-  layout: "auth",
-});
+  layout: 'auth'
+})
 
-import type { FormError, FormSubmitEvent } from "@nuxt/ui";
-
-const showPass = ref<boolean>(false);
+const showPass = ref<boolean>(false)
 const state = reactive({
-  email: undefined,
-  password: undefined,
-  rememberMe: false,
-  showPassword: false,
-});
+  username: '',
+  password: '',
+  rememberMe: false
+})
+
+onMounted(async () => {
+  if (import.meta.client) {
+    const savedCredentials = getRememberedCredentials()
+    if (savedCredentials) {
+      state.username = savedCredentials.username
+      state.rememberMe = savedCredentials.rememberMe
+    }
+  }
+})
 
 const validate = (state: any): FormError[] => {
-  const errors = [];
-  if (!state.email) errors.push({ name: "email", message: "Required" });
-  if (!state.password) errors.push({ name: "password", message: "Required" });
-  return errors;
-};
+  const errors = []
+  if (!state.username) errors.push({ name: 'username', message: t('required') })
+  if (!state.password) errors.push({ name: 'password', message: t('required') })
+  return errors
+}
 
-const toast = useToast();
+const router = useRouter()
+const toast = useToast()
+const { login, isLoading } = useAuth()
+
 async function onSubmit(event: FormSubmitEvent<typeof state>) {
-  toast.add({
-    title: "Success",
-    description: "The form has been submitted.",
-    color: "success",
-  });
+  try {
+    const result = await login(state.username, state.password, state.rememberMe)
+    if (result.success) {
+      toast.add({
+        title: t('success'),
+        description: t('loginSuccess'),
+        color: 'success'
+      })
+
+      // Redirect to dashboard or home page
+      router.push('/')
+    } else if (result.error) {
+      toast.add({
+        title: t('error'),
+        description: result.error,
+        color: 'error'
+      })
+    } else if (result.nextStep?.signInStep === SignInStep.CONFIRM_SIGN_UP) {
+      router.push({
+        path: '/auth/confirm',
+        query: { username: state.username }
+      })
+      toast.add({
+        title: t('confirmationRequired'),
+        description: t('confirmationCodeSent'),
+        color: 'info'
+      })
+    } else {
+      toast.add({
+        title: t('unknownResponse'),
+        description: t('unexpectedError'),
+        color: 'warning'
+      })
+    }
+  } catch (err: any) {
+    console.log('Login error:', err)
+    toast.add({
+      title: t('error'),
+      description: t('unexpectedError'),
+      color: 'error'
+    })
+  }
 }
 </script>
 

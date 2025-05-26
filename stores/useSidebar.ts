@@ -38,7 +38,7 @@ export const useSidebarStore = defineStore('sidebar', {
      */
     checkMobileView() {
       const wasMobile = this.isMobileView;
-      if (process.client) {
+      if (import.meta.client) {
         this.isMobileView = window.innerWidth < 768;
         
         // Auto-close sidebar when resizing to mobile
@@ -52,7 +52,7 @@ export const useSidebarStore = defineStore('sidebar', {
      * Initialize event listeners
      */
     initializeListeners() {
-      if (process.client) {
+      if (import.meta.client) {
         this.checkMobileView();
         window.addEventListener('resize', this.checkMobileView.bind(this));
       }
@@ -62,7 +62,7 @@ export const useSidebarStore = defineStore('sidebar', {
      * Remove event listeners
      */
     removeListeners() {
-      if (process.client) {
+      if (import.meta.client) {
         window.removeEventListener('resize', this.checkMobileView.bind(this));
       }
     }

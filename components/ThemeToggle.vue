@@ -5,20 +5,22 @@
       color="neutral"
       variant="ghost"
       size="xl"
+      :aria-label="isDark ? t('lightMode') : t('darkMode')"
+      :title="isDark ? t('lightMode') : t('darkMode')"
       @click="isDark = !isDark"
     />
   </ClientOnly>
 </template>
 
 <script setup lang="ts">
-const colorMode = useColorMode();
+const colorMode = useColorMode()
 
 const isDark = computed({
   get() {
-    return colorMode.value === "dark";
+    return colorMode.value === 'dark'
   },
   set(_isDark) {
-    colorMode.preference = _isDark ? "dark" : "light";
-  },
-});
+    colorMode.preference = _isDark ? 'dark' : 'light'
+  }
+})
 </script>

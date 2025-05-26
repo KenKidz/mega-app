@@ -1,46 +1,54 @@
 <template>
   <div>
-    <div class="text-center mb-6">
+    <div class="mb-6 text-center">
       <div class="user-icon mb-4">
-        <UIcon name="i-lucide-user-plus" class="text-4xl sm:text-5xl" />
+        <UIcon
+          name="i-lucide-user-plus"
+          class="text-4xl sm:text-5xl"
+        />
       </div>
-      <h1 class="text-xl sm:text-2xl font-bold" id="register-heading">
-        Create Account
+      <h1
+        id="register-heading"
+        class="text-xl font-bold sm:text-2xl"
+      >
+        {{ t('registerTitle') }}
       </h1>
       <p class="text-subtle text-xs sm:text-sm">
-        Register to access all features and services.
+        {{ t('registerDescription') }}
       </p>
     </div>
+
     <div class="space-y-3 sm:space-y-4">
       <!-- Social Register Buttons -->
       <UButton
         block
         color="neutral"
-        class="shadow-sm text-xs sm:text-sm"
+        class="text-xs shadow-sm sm:text-sm"
         variant="subtle"
+        disabled
       >
         <template #leading>
           <UIcon name="i-logos-google-icon" />
         </template>
-        Google
+        {{ t('connectWithGoogle') }}
       </UButton>
-
       <UButton
         block
         color="neutral"
-        class="shadow-sm text-xs sm:text-sm"
+        class="text-xs shadow-sm sm:text-sm"
         variant="subtle"
+        disabled
       >
         <template #leading>
           <UIcon name="i-logos-github-icon" />
         </template>
-        GitHub
+        {{ t('connectWithGithub') }}
       </UButton>
 
       <!-- Divider -->
-      <div class="flex items-center my-6">
+      <div class="my-6 flex items-center">
         <div class="flex-grow border-t border-gray-300"></div>
-        <span class="px-3 text-subtle text-sm">or</span>
+        <span class="text-subtle px-3 text-sm">{{ t('or') }}</span>
         <div class="flex-grow border-t border-gray-300"></div>
       </div>
       <UForm
@@ -49,32 +57,44 @@
         class="space-y-3 sm:space-y-4"
         @submit="onSubmit"
       >
-        <UFormField label="Full Name" required name="fullname">
+        <UFormField
+          :label="t('usernameLabel')"
+          required
+          name="username"
+        >
           <UInput
-            v-model="state.fullname"
+            v-model="state.username"
             class="w-full"
             color="primary"
-            placeholder="Enter your full name"
+            :placeholder="t('chooseUsername')"
           />
         </UFormField>
 
-        <UFormField label="Email" required name="email">
+        <UFormField
+          :label="t('emailLabel')"
+          required
+          name="email"
+        >
           <UInput
             v-model="state.email"
             class="w-full"
             color="primary"
-            placeholder="Enter your email"
+            :placeholder="t('emailPlaceholder')"
             type="email"
             autocomplete="email"
           />
         </UFormField>
-        <UFormField label="Password" required name="password">
+        <UFormField
+          :label="t('passwordLabel')"
+          required
+          name="password"
+        >
           <UInput
             v-model="state.password"
             class="w-full"
             color="primary"
             :type="showPass ? 'text' : 'password'"
-            placeholder="Create a password"
+            :placeholder="t('passwordPlaceholder')"
             :trailing="true"
             @focus="passwordFocused = true"
             @blur="passwordFocused = false"
@@ -85,7 +105,7 @@
                 variant="link"
                 size="md"
                 :icon="showPass ? 'i-lucide-eye-off' : 'i-lucide-eye'"
-                :aria-label="showPass ? 'Hide password' : 'Show password'"
+                :aria-label="showPass ? t('hidePassword') : t('showPassword')"
                 :aria-pressed="showPass"
                 aria-controls="password"
                 @click="showPass = !showPass"
@@ -93,18 +113,22 @@
             </template>
           </UInput>
           <PasswordValidator
+            ref="passwordValidatorRef"
             v-model="state.password"
             :show-validation="passwordFocused"
-            ref="passwordValidatorRef"
           />
         </UFormField>
-        <UFormField label="Confirm Password" required name="confirmPassword">
+        <UFormField
+          :label="t('confirmPassword')"
+          required
+          name="confirmPassword"
+        >
           <UInput
             v-model="state.confirmPassword"
             class="w-full"
             color="primary"
             :type="showConfirmPass ? 'text' : 'password'"
-            placeholder="Confirm your password"
+            :placeholder="t('confirmPassword')"
             :trailing="true"
           >
             <template #trailing>
@@ -114,7 +138,7 @@
                 size="md"
                 :icon="showConfirmPass ? 'i-lucide-eye-off' : 'i-lucide-eye'"
                 :aria-label="
-                  showConfirmPass ? 'Hide password' : 'Show password'
+                  showConfirmPass ? t('hidePassword') : t('showPassword')
                 "
                 :aria-pressed="showConfirmPass"
                 aria-controls="confirmPassword"
@@ -126,20 +150,27 @@
         <UFormField name="agreeTerms">
           <UCheckbox
             v-model="state.agreeTerms"
-            label="I agree to the Terms of Service and Privacy Policy"
+            :label="t('agreeTerms')"
           />
         </UFormField>
+        <UButton
+          type="submit"
+          block
+          class="mt-4"
+          :loading="isLoading"
+          :disabled="isLoading"
+        >
+          {{ t('register') }}
+        </UButton>
 
-        <UButton type="submit" block class="mt-4">Create Account</UButton>
-
-        <div class="text-center mt-4">
-          <p class="text-sm text-subtle">
-            Already have an account?
+        <div class="mt-4 text-center">
+          <p class="text-subtle text-sm">
+            {{ t('alreadyHaveAccount') }}
             <NuxtLink
               to="/auth/login"
-              class="text-blue-600 hover:text-blue-800 font-medium"
+              class="font-medium text-blue-600 hover:text-blue-800"
             >
-              Login here
+              {{ t('login') }}
             </NuxtLink>
           </p>
         </div>
@@ -149,74 +180,111 @@
 </template>
 
 <script setup lang="ts">
+import { z } from 'zod'
+import type { FormSubmitEvent } from '@nuxt/ui'
+import { useAuth } from '~/composables/useAuth'
+import { SignUpStep } from '~/types/auth.type'
+
 definePageMeta({
-  layout: "auth",
-});
+  layout: 'auth'
+})
 
-import { z } from "zod";
-import type { FormSubmitEvent } from "@nuxt/ui";
+type Schema = z.output<typeof schema>
 
-type Schema = z.output<typeof schema>;
-
-const showPass = ref<boolean>(false);
-const showConfirmPass = ref<boolean>(false);
-const passwordFocused = ref<boolean>(false);
-const passwordValidatorRef = ref<any>(null);
+const showPass = ref<boolean>(false)
+const showConfirmPass = ref<boolean>(false)
+const passwordFocused = ref<boolean>(false)
+const passwordValidatorRef = ref<any>(null)
+const registeredUsername = ref<string>('')
 
 const state = reactive<Partial<Schema>>({
-  fullname: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
-  agreeTerms: undefined,
-});
+  username: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  agreeTerms: undefined
+})
 
 const schema = z
   .object({
-    fullname: z.string().min(1, "Required"),
-    email: z.string().min(1, "Required").email("Invalid email format"),
-    password: z.string().min(1, "Required"),
-    confirmPassword: z.string().min(1, "Required"),
+    username: z.string().min(1, t('required')),
+    email: z.string().min(1, t('required')).email(t('invalidEmail')),
+    password: z.string().min(1, t('required')),
+    confirmPassword: z.string().min(1, t('required')),
     agreeTerms: z.literal(true, {
-      errorMap: () => ({ message: "You must agree to the terms" }),
-    }),
+      errorMap: () => ({ message: t('acceptTerms') })
+    })
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
+    message: t('passwordMismatch'),
+    path: ['confirmPassword']
   })
   .refine(
-    (data) => {
-      if (!passwordValidatorRef.value) return true;
-      return passwordValidatorRef.value.isValid;
+    () => {
+      if (!passwordValidatorRef.value) return true
+      return passwordValidatorRef.value.isValid
     },
     {
       message: "Password doesn't meet all requirements",
-      path: ["password"],
+      path: ['password']
     }
-  );
+  )
 
-// Hook into form submission event
-const toast = useToast();
+// Use our auth composable
+const { register, isLoading } = useAuth()
+const toast = useToast()
+const router = useRouter()
+
+// Handle form submission for registration
 async function onSubmit(event: FormSubmitEvent<any>) {
   try {
-    const validData = schema.parse(state);
+    const validData = schema.parse(state)
 
-    toast.add({
-      title: "Success",
-      description: "Your account has been created successfully!",
-      color: "success",
-    });
-    console.log(validData);
+    const result = await register(
+      validData.username,
+      validData.password,
+      validData.email
+    )
+
+    if (result.success) {
+      registeredUsername.value = validData.username
+      if (
+        result.nextStep &&
+        result.nextStep.signUpStep === SignUpStep.CONFIRM_SIGN_UP
+      ) {
+        toast.add({
+          title: t('verificationRequired'),
+          description: t('confirmationCodeSent'),
+          color: 'info'
+        })
+        router.push({
+          path: '/auth/confirm',
+          query: { username: state.username }
+        })
+      } else {
+        toast.add({
+          title: t('success'),
+          description: t('profileUpdated'),
+          color: 'success'
+        })
+
+        // If auto sign-in worked, redirect to home
+        router.push('/')
+      }
+    } else if (result.error) {
+      toast.add({
+        title: t('error'),
+        description: result.error,
+        color: 'error'
+      })
+    }
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const formattedErrors = error.format();
-      console.error("Validation failed:", formattedErrors);
       toast.add({
-        title: "Error",
-        description: "Please fix the form errors",
-        color: "error",
-      });
+        title: t('error'),
+        description: t('invalidCredentials'),
+        color: 'error'
+      })
     }
   }
 }

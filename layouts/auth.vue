@@ -3,13 +3,16 @@
     <div class="absolute top-0 right-2">
       <ThemeToggle />
     </div>
-    <div class="background" aria-hidden="true">
+    <div
+      class="background"
+      aria-hidden="true"
+    >
       <div class="wave wave1"></div>
       <div class="wave wave2"></div>
       <div class="wave wave3"></div>
       <div class="wave wave4"></div>
     </div>
-    <UCard class="w-full max-w-[450px] p-4 md:p-6 mx-4 auth-card bg-base">
+    <UCard class="auth-card bg-base mx-4 w-full max-w-[450px] p-4 md:p-6">
       <!-- Animated background elements -->
       <div class="card-bg-effect"></div>
       <div class="card-particle particle1"></div>
@@ -27,11 +30,22 @@
 useHead({
   meta: [
     {
-      name: "viewport",
-      content: "width=device-width, initial-scale=1, maximum-scale=1",
-    },
-  ],
-});
+      name: 'viewport',
+      content: 'width=device-width, initial-scale=1, maximum-scale=1'
+    }
+  ]
+})
+
+const { isAuthenticated } = useAuth()
+const authRoutes = ['/auth/login', '/auth/register', '/auth/forgot-password']
+const route = useRoute()
+const router = useRouter()
+
+onBeforeMount(() => {
+  if (isAuthenticated.value && authRoutes.includes(route.path)) {
+    router.push('/')
+  }
+})
 </script>
 
 <style scoped>
@@ -52,7 +66,11 @@ useHead({
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, var(--surface-0) 0%, var(--surface-2) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--surface-0) 0%,
+    var(--surface-2) 100%
+  );
   z-index: -1;
 }
 
@@ -110,7 +128,9 @@ useHead({
   border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(12px);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
 :deep(.card-bg-effect) {
@@ -120,7 +140,8 @@ useHead({
   right: 0;
   bottom: 0;
   z-index: -2;
-  background: radial-gradient(
+  background:
+    radial-gradient(
       circle at 10% 20%,
       rgba(59, 130, 246, 0.07) 0%,
       rgba(0, 0, 0, 0) 30%
@@ -241,7 +262,7 @@ useHead({
 :deep(.register-card)::after,
 .auth-card::before,
 .auth-card::after {
-  content: "";
+  content: '';
   position: absolute;
   width: 40px;
   height: 40px;
