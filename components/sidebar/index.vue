@@ -3,7 +3,7 @@
     <!-- Mobile overlay -->
     <div
       v-if="isMobileView && isMobileOpen"
-      class="fixed inset-0 bg-black opacity-30 z-40"
+      class="fixed inset-0 z-40 bg-black opacity-30"
       @click="closeMobileSidebar"
     ></div>
 
@@ -13,31 +13,33 @@
         collapsed: !isExpanded && !isMobileView,
         mobile: isMobileView,
         'mobile-open': isMobileView && isMobileOpen,
-        'mobile-closed': isMobileView && !isMobileOpen,
+        'mobile-closed': isMobileView && !isMobileOpen
       }"
     >
       <div
-        class="sidebar bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 h-screen fixed top-0 left-0 z-50 overflow-y-auto transition-all duration-300 ease-in-out"
+        class="sidebar fixed top-0 left-0 z-50 h-screen overflow-y-auto border-r border-gray-200 bg-white transition-all duration-300 ease-in-out dark:border-gray-700 dark:bg-gray-900"
       >
         <div
-          class="sidebar-header h-16 flex items-center justify-center max-md:justify-between px-4"
+          class="sidebar-header flex h-16 items-center justify-center px-4 max-md:justify-between"
         >
           <div
-          v-if="isExpanded"
+            v-if="isExpanded"
             class="flex items-center justify-between font-semibold"
           >
-            <img src="/logo.png" alt="logo" class="h-8 w-auto" />
-            <div class="font-semibold text-xl">
-              Mega App
-            </div>
+            <img
+              src="/logo.png"
+              alt="logo"
+              class="h-8 w-auto"
+            />
+            <div class="text-xl font-semibold">Mega App</div>
           </div>
           <UButton
             v-if="isMobileView"
             icon="i-lucide-x"
             variant="ghost"
-            @click="closeMobileSidebar"
             size="xl"
             color="neutral"
+            @click="closeMobileSidebar"
           />
         </div>
         <div class="p-4">
@@ -49,7 +51,7 @@
             color="primary"
             variant="pill"
             :ui="{
-              link: 'sidebar-item text-base py-2 rounded-md',
+              link: 'sidebar-item text-base py-2 rounded-md'
             }"
             class="space-y-3"
           />
@@ -60,53 +62,53 @@
 </template>
 
 <script setup lang="ts">
-import { useSidebarStore } from "~/stores/useSidebar";
+import { useSidebarStore } from '~/stores/useSidebar'
 
-const sidebarStore = useSidebarStore();
+const sidebarStore = useSidebarStore()
 
 // Create navigation items with proper structure for UNavigationMenu
 const navItems = computed(() => [
   {
-    label: "Dashboard",
-    icon: "i-heroicons-home",
-    to: "/",
+    label: t('dashboard'),
+    icon: 'i-heroicons-home',
+    to: '/'
   },
   {
-    label: "Profile",
-    icon: "i-heroicons-user",
-    to: "/profile",
+    label: t('profile'),
+    icon: 'i-heroicons-user',
+    to: '/profile'
   },
   {
-    label: "Analytics",
-    icon: "i-heroicons-chart-bar",
+    label: t('analytics'),
+    icon: 'i-heroicons-chart-bar',
     collapsible: true,
     defaultOpen: false,
     children: [
       {
-        label: "Reports",
-        to: "/analytics/reports",
-        icon: "i-heroicons-document-chart-bar",
+        label: t('reports'),
+        to: '/analytics/reports',
+        icon: 'i-heroicons-document-chart-bar'
       },
       {
-        label: "Statistics",
-        to: "/analytics/statistics",
-        icon: "i-heroicons-presentation-chart-line",
-      },
-    ],
+        label: t('statistics'),
+        to: '/analytics/statistics',
+        icon: 'i-heroicons-presentation-chart-line'
+      }
+    ]
   },
   {
-    label: "Settings",
-    icon: "i-heroicons-cog-6-tooth",
-    to: "/settings",
-    badge: "New",
-  },
-]);
+    label: t('settings'),
+    icon: 'i-heroicons-cog-6-tooth',
+    to: '/settings',
+    badge: 'New'
+  }
+])
 
 // Use computed properties for reactivity
-const isExpanded = computed(() => sidebarStore.isExpanded);
-const isMobileView = computed(() => sidebarStore.isMobileView);
-const isMobileOpen = computed(() => sidebarStore.isMobileOpen);
-const closeMobileSidebar = () => sidebarStore.closeMobileSidebar();
+const isExpanded = computed(() => sidebarStore.isExpanded)
+const isMobileView = computed(() => sidebarStore.isMobileView)
+const isMobileOpen = computed(() => sidebarStore.isMobileOpen)
+const closeMobileSidebar = () => sidebarStore.closeMobileSidebar()
 </script>
 
 <style scoped>
@@ -141,7 +143,9 @@ const closeMobileSidebar = () => sidebarStore.closeMobileSidebar();
   padding: 10px;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s ease, background-color 0.15s ease-in-out;
+  transition:
+    all 0.2s ease,
+    background-color 0.15s ease-in-out;
 }
 
 .sidebar-item:hover {

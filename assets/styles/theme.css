@@ -28,22 +28,22 @@
   --crust: #dce0e8;
 
   /* Application-specific color assignments based on Catppuccin guidelines */
-  
+
   /* Background elements */
   --background-pane: var(--base);
   --secondary-pane-crust: var(--crust);
   --secondary-pane-mantle: var(--mantle);
-  
+
   /* Surface elements - for cards, modals, etc */
   --surface-element-0: var(--surface-0);
   --surface-element-1: var(--surface-1);
   --surface-element-2: var(--surface-2);
-  
+
   /* Overlay elements - for dropdowns, tooltips, etc */
   --overlay-element-0: var(--overlay-0);
   --overlay-element-1: var(--overlay-1);
   --overlay-element-2: var(--overlay-2);
-  
+
   /* Typography */
   --body-text: var(--text);
   --heading-text: var(--text);
@@ -51,12 +51,12 @@
   --subheading-text-1: var(--subtext-1);
   --subtle-text: var(--overlay-1);
   --link-text: var(--blue);
-  
+
   /* Status colors */
   --success-text: var(--green);
   --warning-text: var(--yellow);
   --error-text: var(--red);
-  
+
   /* UI elements */
   --tag-color: var(--blue);
   --selection-background: var(--overlay-2);
@@ -94,22 +94,22 @@
   --crust: #11111b;
 
   /* Application-specific color assignments based on Catppuccin guidelines */
-  
+
   /* Background elements */
   --background-pane: var(--base);
   --secondary-pane-crust: var(--crust);
   --secondary-pane-mantle: var(--mantle);
-  
+
   /* Surface elements - for cards, modals, etc */
   --surface-element-0: var(--surface-0);
   --surface-element-1: var(--surface-1);
   --surface-element-2: var(--surface-2);
-  
+
   /* Overlay elements - for dropdowns, tooltips, etc */
   --overlay-element-0: var(--overlay-0);
   --overlay-element-1: var(--overlay-1);
   --overlay-element-2: var(--overlay-2);
-  
+
   /* Typography */
   --body-text: var(--text);
   --heading-text: var(--text);
@@ -117,12 +117,12 @@
   --subheading-text-1: var(--subtext-1);
   --subtle-text: var(--overlay-1);
   --link-text: var(--blue);
-  
+
   /* Status colors */
   --success-text: var(--green);
   --warning-text: var(--yellow);
   --error-text: var(--red);
-  
+
   /* UI elements */
   --tag-color: var(--blue);
   --selection-background: var(--overlay-2);
@@ -131,68 +131,164 @@
 }
 
 /* Utility classes for direct color usage */
-.text-rosewater { color: var(--rosewater); }
-.text-flamingo { color: var(--flamingo); }
-.text-pink { color: var(--pink); }
-.text-mauve { color: var(--mauve); }
-.text-red { color: var(--red); }
-.text-maroon { color: var(--maroon); }
-.text-peach { color: var(--peach); }
-.text-yellow { color: var(--yellow); }
-.text-green { color: var(--green); }
-.text-teal { color: var(--teal); }
-.text-sky { color: var(--sky); }
-.text-sapphire { color: var(--sapphire); }
-.text-blue { color: var(--blue); }
-.text-lavender { color: var(--lavender); }
+.text-rosewater {
+  color: var(--rosewater);
+}
+.text-flamingo {
+  color: var(--flamingo);
+}
+.text-pink {
+  color: var(--pink);
+}
+.text-mauve {
+  color: var(--mauve);
+}
+.text-red {
+  color: var(--red);
+}
+.text-maroon {
+  color: var(--maroon);
+}
+.text-peach {
+  color: var(--peach);
+}
+.text-yellow {
+  color: var(--yellow);
+}
+.text-green {
+  color: var(--green);
+}
+.text-teal {
+  color: var(--teal);
+}
+.text-sky {
+  color: var(--sky);
+}
+.text-sapphire {
+  color: var(--sapphire);
+}
+.text-blue {
+  color: var(--blue);
+}
+.text-lavender {
+  color: var(--lavender);
+}
 
-.bg-rosewater { background-color: var(--rosewater); }
-.bg-flamingo { background-color: var(--flamingo); }
-.bg-pink { background-color: var(--pink); }
-.bg-mauve { background-color: var(--mauve); }
-.bg-red { background-color: var(--red); }
-.bg-maroon { background-color: var(--maroon); }
-.bg-peach { background-color: var(--peach); }
-.bg-yellow { background-color: var(--yellow); }
-.bg-green { background-color: var(--green); }
-.bg-teal { background-color: var(--teal); }
-.bg-sky { background-color: var(--sky); }
-.bg-sapphire { background-color: var(--sapphire); }
-.bg-blue { background-color: var(--blue); }
-.bg-lavender { background-color: var(--lavender); }
+.bg-rosewater {
+  background-color: var(--rosewater);
+}
+.bg-flamingo {
+  background-color: var(--flamingo);
+}
+.bg-pink {
+  background-color: var(--pink);
+}
+.bg-mauve {
+  background-color: var(--mauve);
+}
+.bg-red {
+  background-color: var(--red);
+}
+.bg-maroon {
+  background-color: var(--maroon);
+}
+.bg-peach {
+  background-color: var(--peach);
+}
+.bg-yellow {
+  background-color: var(--yellow);
+}
+.bg-green {
+  background-color: var(--green);
+}
+.bg-teal {
+  background-color: var(--teal);
+}
+.bg-sky {
+  background-color: var(--sky);
+}
+.bg-sapphire {
+  background-color: var(--sapphire);
+}
+.bg-blue {
+  background-color: var(--blue);
+}
+.bg-lavender {
+  background-color: var(--lavender);
+}
 
 /* Layout utility classes based on Catppuccin guidelines */
-.bg-base { background-color: var(--background-pane); }
-.bg-crust { background-color: var(--secondary-pane-crust); }
-.bg-mantle { background-color: var(--secondary-pane-mantle); }
+.bg-base {
+  background-color: var(--background-pane);
+}
+.bg-crust {
+  background-color: var(--secondary-pane-crust);
+}
+.bg-mantle {
+  background-color: var(--secondary-pane-mantle);
+}
 
-.bg-surface-0 { background-color: var(--surface-element-0); }
-.bg-surface-1 { background-color: var(--surface-element-1); }
-.bg-surface-2 { background-color: var(--surface-element-2); }
+.bg-surface-0 {
+  background-color: var(--surface-element-0);
+}
+.bg-surface-1 {
+  background-color: var(--surface-element-1);
+}
+.bg-surface-2 {
+  background-color: var(--surface-element-2);
+}
 
-.bg-overlay-0 { background-color: var(--overlay-element-0); }
-.bg-overlay-1 { background-color: var(--overlay-element-1); }
-.bg-overlay-2 { background-color: var(--overlay-element-2); }
+.bg-overlay-0 {
+  background-color: var(--overlay-element-0);
+}
+.bg-overlay-1 {
+  background-color: var(--overlay-element-1);
+}
+.bg-overlay-2 {
+  background-color: var(--overlay-element-2);
+}
 
 /* Typography utility classes */
-.text-body { color: var(--body-text); }
-.text-heading { color: var(--heading-text); }
-.text-subheading-0 { color: var(--subheading-text-0); }
-.text-subheading-1 { color: var(--subheading-text-1); }
-.text-subtle { color: var(--subtle-text); }
-.text-link { color: var(--link-text); }
+.text-body {
+  color: var(--body-text);
+}
+.text-heading {
+  color: var(--heading-text);
+}
+.text-subheading-0 {
+  color: var(--subheading-text-0);
+}
+.text-subheading-1 {
+  color: var(--subheading-text-1);
+}
+.text-subtle {
+  color: var(--subtle-text);
+}
+.text-link {
+  color: var(--link-text);
+}
 
 /* Status utility classes */
-.text-success { color: var(--success-text); }
-.text-warning { color: var(--warning-text); }
-.text-error { color: var(--error-text); }
+.text-success {
+  color: var(--success-text);
+}
+.text-warning {
+  color: var(--warning-text);
+}
+.text-error {
+  color: var(--error-text);
+}
 
 /* Selection utility */
-.selection-bg { 
-  background-color: var(--selection-background); 
+.selection-bg {
+  background-color: var(--selection-background);
   opacity: var(--selection-opacity);
 }
 
 /* Additional UI element classes */
-.cursor-color { background-color: var(--cursor); }
-.tag-bg { background-color: var(--tag-color); }
+.cursor-color {
+  background-color: var(--cursor);
+}
+.tag-bg {
+  background-color: var(--tag-color);
+}

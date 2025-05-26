@@ -1,5 +1,9 @@
 <template>
-  <UApp>
+  <UApp
+    :toaster="{
+      position: 'top-right'
+    }"
+  >
     <LoadingOverlay />
     <NuxtLayout v-if="!loading">
       <NuxtPage />
@@ -8,17 +12,17 @@
 </template>
 
 <script lang="ts" setup>
-import { useLoadingStore } from "~/stores/useLoading";
+import { useLoadingStore } from '~/stores/useLoading'
 
-const { checkAuth } = useAuth();
-const loadingStore = useLoadingStore();
-const loading = ref(false);
+const { checkAuth } = useAuth()
+const loadingStore = useLoadingStore()
+const loading = ref(false)
 
 onBeforeMount(async () => {
-  loading.value = loadingStore.startLoading();
+  loading.value = loadingStore.startLoading()
 
-  await checkAuth();
+  await checkAuth()
 
-  loading.value = loadingStore.stopLoading();
-});
+  loading.value = loadingStore.stopLoading()
+})
 </script>

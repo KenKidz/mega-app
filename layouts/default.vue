@@ -1,5 +1,8 @@
 <template>
-  <div class="layout" :class="{ mobile: isMobileView }">
+  <div
+    class="layout"
+    :class="{ mobile: isMobileView }"
+  >
     <Sidebar />
     <Navbar />
     <main
@@ -8,13 +11,10 @@
         'sidebar-expanded': isExpanded && !isMobileView,
         'sidebar-collapsed': !isExpanded && !isMobileView,
         mobile: isMobileView,
-        'with-overlay': isMobileView && isMobileOpen,
+        'with-overlay': isMobileView && isMobileOpen
       }"
     >
       <div class="page-container">
-        <div class="mb-6">
-          <h1 class="text-2xl font-semibold">Dashboard</h1>
-        </div>
         <slot />
       </div>
     </main>
@@ -22,24 +22,24 @@
 </template>
 
 <script setup lang="ts">
-import { useSidebarStore } from "~/stores/useSidebar";
+import { useSidebarStore } from '~/stores/useSidebar'
 
-const sidebarStore = useSidebarStore();
-const { isAuthenticated } = useAuth();
-const authRoutes = ["/auth/login", "/auth/register", "/auth/forgot-password"];
-const route = useRoute();
-const router = useRouter();
+const sidebarStore = useSidebarStore()
+const { isAuthenticated } = useAuth()
+const authRoutes = ['/auth/login', '/auth/register', '/auth/forgot-password']
+const route = useRoute()
+const router = useRouter()
 
 // Use computed properties for reactivity
-const isExpanded = computed(() => sidebarStore.isExpanded);
-const isMobileView = computed(() => sidebarStore.isMobileView);
-const isMobileOpen = computed(() => sidebarStore.isMobileOpen);
+const isExpanded = computed(() => sidebarStore.isExpanded)
+const isMobileView = computed(() => sidebarStore.isMobileView)
+const isMobileOpen = computed(() => sidebarStore.isMobileOpen)
 
 onBeforeMount(() => {
   if (!isAuthenticated.value && !authRoutes.includes(route.path)) {
-    router.push("/auth/login");
+    router.push('/auth/login')
   }
-});
+})
 </script>
 
 <style scoped>

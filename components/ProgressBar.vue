@@ -1,14 +1,25 @@
 <template>
-  <div class="progress-bar-wrapper" :class="{ 'in-card': inCard }">
-    <div v-if="label" class="progress-label">{{ label }}</div>
+  <div
+    class="progress-bar-wrapper"
+    :class="{ 'in-card': inCard }"
+  >
+    <div
+      v-if="label"
+      class="progress-label"
+    >
+      {{ label }}
+    </div>
     <div class="progress-container">
-      <div 
-        class="progress-indicator" 
-        :class="{ 'indeterminate': !value }"
+      <div
+        class="progress-indicator"
+        :class="{ indeterminate: !value }"
         :style="value ? { width: `${value}%` } : {}"
       ></div>
     </div>
-    <div v-if="showPercentage && value" class="progress-percentage">
+    <div
+      v-if="showPercentage && value"
+      class="progress-percentage"
+    >
       {{ Math.round(value) }}%
     </div>
   </div>
@@ -32,7 +43,7 @@ defineProps({
     type: Boolean,
     default: false
   }
-});
+})
 </script>
 
 <style scoped>

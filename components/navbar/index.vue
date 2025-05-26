@@ -1,14 +1,16 @@
 <template>
   <div
-    class="navbar fixed top-0 h-16 bg-white dark:bg-gray-900 shadow-sm z-20 flex items-center transition-all duration-300 ease-in-out"
+    class="navbar fixed top-0 z-20 flex h-16 items-center bg-white shadow-sm transition-all duration-300 ease-in-out dark:bg-gray-900"
     :class="{
       expanded: isExpanded && !isMobileView,
       collapsed: !isExpanded && !isMobileView,
-      mobile: isMobileView,
+      mobile: isMobileView
     }"
   >
-    <div class="navbar-left flex items-center h-full">
-      <div class="mx-4 p-1 flex items-center rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
+    <div class="navbar-left flex h-full items-center">
+      <div
+        class="mx-4 flex items-center rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+      >
         <UIcon
           name="i-lucide-align-justify"
           size="25"
@@ -18,13 +20,16 @@
         />
       </div>
     </div>
-    <div class="navbar-right ml-auto mr-5 flex items-center">
+    <div class="navbar-right mr-5 ml-auto flex items-center">
       <div class="flex items-center space-x-4">
-        <div v-if="isMobileView" class="flex items-center">
-          <span class="text-sm text-gray-600 dark:text-gray-400 mr-2"
-            >Mobile View</span
-          >
-          <span class="inline-block w-3 h-3 rounded-full bg-green-500"></span>
+        <div
+          v-if="isMobileView"
+          class="flex items-center"
+        >
+          <span class="mr-2 text-sm text-gray-600 dark:text-gray-400">
+            {{ $t('mobileView') }}
+          </span>
+          <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
         </div>
 
         <ThemeToggle />
@@ -36,7 +41,7 @@
             size="sm"
             @click="router.push('/auth/login')"
           >
-            Login
+            {{ $t('login') }}
           </UButton>
           <UButton
             variant="solid"
@@ -44,7 +49,7 @@
             size="sm"
             @click="router.push('/auth/register')"
           >
-            Sign Up
+            {{ $t('signUp') }}
           </UButton>
         </div>
 
@@ -56,26 +61,26 @@
 </template>
 
 <script setup lang="ts">
-import { useSidebarStore } from "~/stores/useSidebar";
+import { useSidebarStore } from '~/stores/useSidebar'
 
-const sidebarStore = useSidebarStore();
-const { isAuthenticated } = useAuth();
-const router = useRouter();
+const sidebarStore = useSidebarStore()
+const { isAuthenticated } = useAuth()
+const router = useRouter()
 
 // Initialize store event listeners
 onMounted(() => {
-  sidebarStore.initializeListeners();
-});
+  sidebarStore.initializeListeners()
+})
 
 onUnmounted(() => {
-  sidebarStore.removeListeners();
-});
+  sidebarStore.removeListeners()
+})
 
 // Use computed properties for reactivity
-const isExpanded = computed(() => sidebarStore.isExpanded);
-const isMobileView = computed(() => sidebarStore.isMobileView);
+const isExpanded = computed(() => sidebarStore.isExpanded)
+const isMobileView = computed(() => sidebarStore.isMobileView)
 
-const toggleSidebar = () => sidebarStore.toggleSidebar();
+const toggleSidebar = () => sidebarStore.toggleSidebar()
 </script>
 
 <style scoped>

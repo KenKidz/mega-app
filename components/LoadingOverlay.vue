@@ -1,19 +1,30 @@
 <template>
   <Teleport to="body">
     <Transition name="fade">
-      <div v-if="loadingStore.isLoading" class="loading-overlay">
+      <div
+        v-if="loadingStore.isLoading"
+        class="loading-overlay"
+      >
         <div class="loading-content">
           <div class="spinner-container">
             <div class="spinner-circle"></div>
-            <UIcon name="i-heroicons-arrow-path" class="loading-icon" />
+            <UIcon
+              name="i-lucide-loader"
+              class="loading-icon"
+            />
           </div>
           <p class="loading-text">{{ loadingStore.loadingMessage }}</p>
-          
-          <!-- Progress bar for determinate operations -->
-          <div v-if="loadingStore.progressMode === 'determinate'" class="progress-container">
-            <div class="progress-bar" :style="{ width: `${loadingStore.progress}%` }"></div>
-          </div>
 
+          <!-- Progress bar for determinate operations -->
+          <div
+            v-if="loadingStore.progressMode === 'determinate'"
+            class="progress-container"
+          >
+            <div
+              class="progress-bar"
+              :style="{ width: `${loadingStore.progress}%` }"
+            ></div>
+          </div>
         </div>
       </div>
     </Transition>
@@ -21,9 +32,9 @@
 </template>
 
 <script setup lang="ts">
-import { useLoadingStore } from '~/stores/useLoading';
+import { useLoadingStore } from '~/stores/useLoading'
 
-const loadingStore = useLoadingStore();
+const loadingStore = useLoadingStore()
 </script>
 
 <style scoped>
@@ -33,23 +44,20 @@ const loadingStore = useLoadingStore();
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  backdrop-filter: blur(4px);
 }
 
 .loading-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: white;
-  background-color: rgba(17, 24, 39, 0.8);
+  color: var(--text);
+  background-color: transparent;
   padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   max-width: 90%;
   width: 30rem;
 }
@@ -146,7 +154,9 @@ const loadingStore = useLoadingStore();
 
 .fade-slide-up-enter-active,
 .fade-slide-up-leave-active {
-  transition: opacity 0.5s, transform 0.5s;
+  transition:
+    opacity 0.5s,
+    transform 0.5s;
 }
 
 .fade-slide-up-enter-from,

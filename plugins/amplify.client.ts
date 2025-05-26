@@ -1,9 +1,9 @@
-import { Amplify } from "aws-amplify";
+import { Amplify } from 'aws-amplify'
 
-export default defineNuxtPlugin((nuxtApp) => {
-  const config = useRuntimeConfig();
+export default defineNuxtPlugin(() => {
+  const config = useRuntimeConfig()
   const { awsCognitoClientId, awsCognitoUserPoolId, awsCognitoIdentityPoolId } =
-    config.public;
+    config.public
   Amplify.configure({
     Auth: {
       Cognito: {
@@ -11,13 +11,13 @@ export default defineNuxtPlugin((nuxtApp) => {
         userPoolClientId: awsCognitoClientId,
         identityPoolId: awsCognitoIdentityPoolId,
         loginWith: {
-          email: true,
+          email: true
         },
-        signUpVerificationMethod: "code",
+        signUpVerificationMethod: 'code',
         userAttributes: {
           email: {
-            required: true,
-          },
+            required: true
+          }
         },
         allowGuestAccess: true,
         passwordFormat: {
@@ -25,9 +25,9 @@ export default defineNuxtPlugin((nuxtApp) => {
           requireLowercase: true,
           requireUppercase: true,
           requireNumbers: true,
-          requireSpecialCharacters: true,
-        },
-      },
-    },
-  });
-});
+          requireSpecialCharacters: true
+        }
+      }
+    }
+  })
+})

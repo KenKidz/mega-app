@@ -1,9 +1,12 @@
 <template>
-  <div class="password-validator" v-if="modelValue && showValidation">
+  <div
+    v-if="modelValue && showValidation"
+    class="password-validator"
+  >
     <div
-      class="validator-popup p-3 bg-base rounded-lg shadow-lg border border-gray-200 dark:border-gray-700"
+      class="validator-popup bg-base rounded-lg border border-gray-200 p-3 shadow-lg dark:border-gray-700"
     >
-      <p class="text-base font-medium mb-2">Password must:</p>
+      <p class="mb-2 text-base font-medium">{{ t('passwordRequirements') }}</p>
       <ul class="space-y-1 text-sm">
         <li
           v-for="(rule, index) in passwordRules"
@@ -11,7 +14,7 @@
           class="flex items-center gap-2"
           :class="{
             'text-green': rule.isValid,
-            'text-red': !rule.isValid,
+            'text-red': !rule.isValid
           }"
         >
           <UIcon
@@ -29,31 +32,31 @@
 const props = defineProps({
   modelValue: {
     type: String,
-    default: "",
+    default: ''
   },
   showValidation: {
     type: Boolean,
-    default: false,
-  },
-});
+    default: false
+  }
+})
 
 // Define individual validation rules
-const hasMinLength = computed(() => props.modelValue?.length >= 8);
-const hasUppercase = computed(() => /[A-Z]/.test(props.modelValue || ""));
-const hasLowercase = computed(() => /[a-z]/.test(props.modelValue || ""));
-const hasNumber = computed(() => /\d/.test(props.modelValue || ""));
+const hasMinLength = computed(() => props.modelValue?.length >= 8)
+const hasUppercase = computed(() => /[A-Z]/.test(props.modelValue || ''))
+const hasLowercase = computed(() => /[a-z]/.test(props.modelValue || ''))
+const hasNumber = computed(() => /\d/.test(props.modelValue || ''))
 const hasSpecialChar = computed(() =>
-  /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(props.modelValue || "")
-);
+  /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(props.modelValue || '')
+)
 
 // Create a reactive rules array for v-for rendering
 const passwordRules = computed(() => [
-  { text: 'Be at least 8 characters', isValid: hasMinLength.value },
-  { text: 'Contain at least one uppercase letter', isValid: hasUppercase.value },
-  { text: 'Contain at least one lowercase letter', isValid: hasLowercase.value },
-  { text: 'Contain at least one number', isValid: hasNumber.value },
-  { text: 'Contain at least one special character', isValid: hasSpecialChar.value }
-]);
+  { text: t('passwordRequiresMinLength'), isValid: hasMinLength.value },
+  { text: t('passwordRequiresUppercase'), isValid: hasUppercase.value },
+  { text: t('passwordRequiresLowercase'), isValid: hasLowercase.value },
+  { text: t('passwordRequiresNumber'), isValid: hasNumber.value },
+  { text: t('passwordRequiresSpecialChar'), isValid: hasSpecialChar.value }
+])
 
 // Determine if all rules are satisfied
 const isValid = computed(() => {
@@ -63,8 +66,8 @@ const isValid = computed(() => {
     hasLowercase.value &&
     hasNumber.value &&
     hasSpecialChar.value
-  );
-});
+  )
+})
 
 // Expose validation state to parent components
 defineExpose({
@@ -73,8 +76,8 @@ defineExpose({
   hasUppercase,
   hasLowercase,
   hasNumber,
-  hasSpecialChar,
-});
+  hasSpecialChar
+})
 </script>
 
 <style scoped>

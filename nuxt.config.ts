@@ -9,6 +9,8 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxt/ui',
     '@pinia/nuxt',
+    '@nuxtjs/i18n',
+    '@nuxt/eslint',
   ],
   vite: {
     plugins: [
@@ -30,5 +32,13 @@ export default defineNuxtConfig({
       awsAccessKeyId: '',
       awsSecretAccessKey: '',
     }
+  },
+
+  i18n: {
+    locales: [
+      { code: 'en', name: 'English', iso: 'en-US' },
+    ],
+    defaultLocale: 'en',
+    strategy: 'no_prefix'
   },
 })
