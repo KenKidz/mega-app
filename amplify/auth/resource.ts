@@ -10,9 +10,9 @@ export const auth = defineAuth({
   },
   userAttributes: {
     // Add custom attributes
-    custom_avatar_key: {
-      required: false,
-      mutable: true
+    "custom:avatar_key": {
+      mutable: true,
+      dataType: 'String'
     }
   }
 });
