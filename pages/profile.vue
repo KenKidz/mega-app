@@ -146,10 +146,12 @@ const avatarError = ref<string | null>(null)
 const avatarFile = ref<File | null>(null)
 const loading = ref(false)
 const avatarKey = ref<string | null>(null)
+const loadingStore = useLoadingStore()
 
 // Load user data when component mounts
 onMounted(async () => {
   if (user.value) {
+    loadingStore.startLoading('profile')
     // Extract user data from Cognito user
     form.username = user.value.username || ''
     form.email = user.value.attributes?.email || ''
@@ -168,12 +170,7 @@ onMounted(async () => {
           ? key.replace('protected/', '')
           : key
 
-        // Remove username from the key if it's already included
-        const cleanKey = keyToUse.includes(`${user.value.username}/`)
-          ? keyToUse.replace(`${user.value.username}/`, '')
-          : keyToUse
-
-        const url = await getFileUrl(cleanKey, {
+        const url = await getFileUrl(keyToUse, {
           accessLevel: 'protected',
           username: user.value.username
         })
@@ -187,6 +184,7 @@ onMounted(async () => {
         avatarPreview.value = ''
       }
     }
+    loadingStore.stopLoading()
   }
 })
 
