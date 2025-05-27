@@ -1,0 +1,23 @@
+version: 1
+backend:
+  phases:
+    build:
+      commands:
+        - corepack enable
+        - pnpm install --frozen-lockfile
+        - pnpm exec ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+frontend:
+  phases:
+    build:
+      commands:
+        - echo "NUXT_PUBLIC_AWS_REGION=$NUXT_PUBLIC_AWS_REGION" >> .env
+        - echo "NUXT_PUBLIC_AWS_S3_BUCKET=$NUXT_PUBLIC_AWS_S3_BUCKET" >> .env
+        - echo "NUXT_PUBLIC_AWS_COGNITO_USER_POOL_ID=$NUXT_PUBLIC_AWS_COGNITO_USER_POOL_ID" >> .env
+        - echo "NUXT_PUBLIC_AWS_COGNITO_CLIENT_ID=$NUXT_PUBLIC_AWS_COGNITO_CLIENT_ID" >> .env
+        - echo "NUXT_PUBLIC_AWS_CLOUDFRONT_DOMAIN=$NUXT_PUBLIC_AWS_CLOUDFRONT_DOMAIN" >> .env
+        - echo "NUXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID=$NUXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID" >> .env
+        - pnpm run build
+  artifacts:
+    baseDirectory: .amplify-hosting
+    files:
+      - '**/*'

@@ -2,7 +2,6 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
-  ssr: false,
   devtools: { enabled: true },
   css: ['~/assets/styles/main.css'],
   modules: [
@@ -22,15 +21,15 @@ export default defineNuxtConfig({
     layoutTransition: { name: 'page', mode: 'out-in' },
   },
   runtimeConfig: {
+    awsAccessKeyId: import.meta.env.NUXT_AWS_ACCESS_KEY_ID,
+    awsSecretAccessKey: import.meta.env.NUXT_AWS_SECRET_ACCESS_KEY,
     public: {
       awsRegion: import.meta.env.NUXT_PUBLIC_AWS_REGION,
       awsS3Bucket: import.meta.env.NUXT_PUBLIC_AWS_S3_BUCKET,
       awsCognitoUserPoolId: import.meta.env.NUXT_PUBLIC_AWS_COGNITO_USER_POOL_ID,
       awsCognitoClientId: import.meta.env.NUXT_PUBLIC_AWS_COGNITO_CLIENT_ID,
       awsCognitoIdentityPoolId: import.meta.env.NUXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID,
-      awsCloudfrontDomain: import.meta.env.NUXT_PUBLIC_AWS_CLOUDFRONT_DOMAIN,
-      awsAccessKeyId: import.meta.env.NUXT_PUBLIC_AWS_ACCESS_KEY_ID,
-      awsSecretAccessKey: import.meta.env.NUXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
+      awsCloudfrontDomain: import.meta.env.NUXT_PUBLIC_AWS_CLOUDFRONT_DOMAIN
     }
   },
 
