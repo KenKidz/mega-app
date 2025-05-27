@@ -26,6 +26,18 @@
               class="hidden"
               @change="handleAvatarChange"
             />
+            <div
+              v-if="isUploading"
+              class="bg-opacity-50 absolute inset-0 flex flex-col items-center justify-center rounded-full bg-gray-800"
+            >
+              <UProgress
+                :value="progress"
+                :max="100"
+                class="w-16"
+                color="primary"
+              />
+              <span class="mt-1 text-xs text-white">{{ progress }}%</span>
+            </div>
           </div>
           <p
             v-if="avatarError"
@@ -109,9 +121,12 @@
 
 <script setup lang="ts">
 import { useAuth } from '~/composables/useAuth'
+import { useStorage } from '~/composables/useStorage'
 
 // Get auth composable
 const { user, isLoading, updateAttributes } = useAuth()
+// Get storage composable
+const { uploadFile, isUploading, progress } = useStorage()
 
 // Form state
 const form = reactive({
@@ -130,6 +145,7 @@ const avatarPreview = ref<any>('')
 const avatarError = ref<string | null>(null)
 const avatarFile = ref<File | null>(null)
 const loading = ref(false)
+const avatarKey = ref<string | null>(null)
 
 // Load user data when component mounts
 onMounted(async () => {
@@ -140,7 +156,37 @@ onMounted(async () => {
 
     // Other attributes might be available depending on your Cognito setup
     form.fullName = user.value.attributes?.name || ''
-    form.phoneNumber = user.value.attributes?.phone_number || ''
+    form.phoneNumber = user.value.attributes?.phone_number || '' // Load user avatar from S3 if available
+    if (user.value.attributes && user.value.attributes['custom:avatar_key']) {
+      try {
+        const key = user.value.attributes['custom:avatar_key'] as string
+        avatarKey.value = key
+        const { getFileUrl } = useStorage()
+
+        // Handle key format - remove 'protected/' prefix if present
+        const keyToUse = key.startsWith('protected/')
+          ? key.replace('protected/', '')
+          : key
+
+        // Remove username from the key if it's already included
+        const cleanKey = keyToUse.includes(`${user.value.username}/`)
+          ? keyToUse.replace(`${user.value.username}/`, '')
+          : keyToUse
+
+        const url = await getFileUrl(cleanKey, {
+          accessLevel: 'protected',
+          username: user.value.username
+        })
+
+        if (url) {
+          avatarPreview.value = url
+        }
+      } catch (error) {
+        console.error('Error loading avatar:', error)
+        // If we can't load the avatar, use default
+        avatarPreview.value = ''
+      }
+    }
   }
 })
 
@@ -207,51 +253,141 @@ function handlePhoneNumberChange(event: Event) {
   form.phoneNumber = formatPhoneNumber(target.value)
 }
 
+// Handle success messages
+function showSuccessMessage() {
+  const toast = useToast()
+  toast.add({
+    title: t('success') || 'Success',
+    description: t('profileUpdated') || 'Profile updated successfully',
+    color: 'success'
+  })
+}
+
+// Handle error messages
+function showErrorMessage(error?: string) {
+  const toast = useToast()
+  toast.add({
+    title: t('error') || 'Error',
+    description: error || t('errorUpdatingProfile') || 'Error updating profile',
+    color: 'error'
+  })
+}
+
+// Create user attributes object for updates
+function createUserAttributes(
+  includeAvatar: boolean = false,
+  avatarKeyValue?: string
+): Record<string, string> {
+  const userAttributes: Record<string, string> = {
+    email: form.email,
+    name: form.fullName
+  }
+
+  // Only add phone number if it's valid
+  if (form.phoneNumber) {
+    userAttributes.phone_number = form.phoneNumber
+  }
+  // Add avatar key if provided
+  if (includeAvatar && avatarKeyValue) {
+    userAttributes['custom:avatar_key'] = avatarKeyValue
+  }
+  return userAttributes
+}
+
+// Update user profile with attributes
+async function updateUserProfile(attributes: Record<string, string>) {
+  const result = await updateAttributes(attributes)
+  if (result.success) {
+    showSuccessMessage()
+  } else if (result.error) {
+    showErrorMessage(result.error)
+  }
+  return result.success
+}
+
+// Upload avatar to S3
+async function uploadAvatar(): Promise<{ success: boolean; key?: string }> {
+  if (!avatarFile.value) {
+    return { success: false }
+  }
+
+  // Reset progress and set uploading state
+  progress.value = 0
+  isUploading.value = true
+
+  try {
+    // Generate a unique filename with timestamp and username
+    const timestamp = new Date().getTime()
+    const fileExtension = avatarFile.value.name.split('.').pop() || 'jpg'
+    const fileName = `avatar-${form.username}-${timestamp}.${fileExtension}` // Upload the file to S3
+    const uploadResult = await uploadFile(avatarFile.value, fileName, {
+      path: 'avatars',
+      accessLevel: 'protected',
+      username: form.username,
+      onProgress: (progressEvent: { loaded: number; total: number }) => {
+        progress.value = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        )
+      }
+    })
+
+    if (!uploadResult.success) {
+      showErrorMessage('Failed to upload avatar')
+      return { success: false }
+    }
+
+    // Store the full key with the correct path format for future retrieval
+    const fullKey = `${form.username}/avatars/${fileName}`
+
+    return {
+      success: true,
+      key: fullKey
+    }
+  } catch (error) {
+    console.error('Error uploading avatar:', error)
+    showErrorMessage('An unexpected error occurred while uploading avatar')
+    return { success: false }
+  } finally {
+    // Reset uploading state when done
+    isUploading.value = false
+  }
+}
+
+// Main profile save function
 async function saveProfile() {
   loading.value = true
-  const toast = useToast()
+
   // Validate phone number before saving
   if (form.phoneNumber && !validatePhoneNumber(form.phoneNumber)) {
-    phoneNumberError.value = t('invalidPhoneNumber')
+    phoneNumberError.value =
+      t('invalidPhoneNumber') || 'Invalid phone number format'
     loading.value = false
     return
   }
 
   try {
-    const result = await updateAttributes({
-      email: form.email,
-      name: form.fullName,
-      phone_number: form.phoneNumber
-    })
-
-    if (result.success) {
-      toast.add({
-        title: t('success'),
-        description: t('profileUpdated'),
-        color: 'success'
-      })
-    } else if (result.error) {
-      toast.add({
-        title: t('error'),
-        description: result.error,
-        color: 'error'
-      })
-    }
-
+    // If avatar file exists, upload it first
     if (avatarFile.value) {
-      toast.add({
-        title: t('info'),
-        description: t('avatarUploaded'),
-        color: 'info'
-      })
+      const avatarUploadResult = await uploadAvatar()
+
+      if (avatarUploadResult.success && avatarUploadResult.key) {
+        // Update profile with avatar
+        const updateSuccess = await updateUserProfile(
+          createUserAttributes(true, avatarUploadResult.key)
+        )
+
+        // Clear the file reference if update was successful
+        if (updateSuccess) {
+          avatarFile.value = null
+        }
+      }
+    } else {
+      // Just update profile without avatar
+      await updateUserProfile(createUserAttributes())
     }
   } catch (error) {
     console.log('Error updating profile:', error)
-    toast.add({
-      title: t('error'),
-      description: t('errorUpdatingProfile'),
-      color: 'error'
-    })
+    showErrorMessage()
   } finally {
     loading.value = false
   }

@@ -2,8 +2,14 @@ import { Amplify } from 'aws-amplify'
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
-  const { awsCognitoClientId, awsCognitoUserPoolId, awsCognitoIdentityPoolId } =
-    config.public
+  const {
+    awsCognitoClientId,
+    awsCognitoUserPoolId,
+    awsCognitoIdentityPoolId,
+    awsRegion,
+    awsS3Bucket
+  } = config.public
+
   Amplify.configure({
     Auth: {
       Cognito: {
@@ -27,6 +33,12 @@ export default defineNuxtPlugin(() => {
           requireNumbers: true,
           requireSpecialCharacters: true
         }
+      }
+    },
+    Storage: {
+      S3: {
+        region: awsRegion,
+        bucket: awsS3Bucket
       }
     }
   })
