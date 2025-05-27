@@ -23,14 +23,14 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      awsRegion: '',
-      awsS3Bucket: '',
-      awsCognitoUserPoolId: '',
-      awsCognitoClientId: '',
-      awsCognitoIdentityPoolId: '',
-      awsCloudfrontDomain: '',
-      awsAccessKeyId: '',
-      awsSecretAccessKey: '',
+      awsRegion: import.meta.env.NUXT_PUBLIC_AWS_REGION,
+      awsS3Bucket: import.meta.env.NUXT_PUBLIC_AWS_S3_BUCKET,
+      awsCognitoUserPoolId: import.meta.env.NUXT_PUBLIC_AWS_COGNITO_USER_POOL_ID,
+      awsCognitoClientId: import.meta.env.NUXT_PUBLIC_AWS_COGNITO_CLIENT_ID,
+      awsCognitoIdentityPoolId: import.meta.env.NUXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID,
+      awsCloudfrontDomain: import.meta.env.NUXT_PUBLIC_AWS_CLOUDFRONT_DOMAIN,
+      awsAccessKeyId: import.meta.env.NUXT_PUBLIC_AWS_ACCESS_KEY_ID,
+      awsSecretAccessKey: import.meta.env.NUXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
     }
   },
 
